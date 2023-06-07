@@ -29,4 +29,4 @@ const watchlistApi = {
     },
 };
 
-export default watchlistAapi;
+export default watchlistApi;
