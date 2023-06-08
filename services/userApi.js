@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import sendAuthenticatedRequest from "./api";
-import  from 'financialmodelingprep'
+
 // fill in QUT virtual machine IP
 const BASE_URL = 'https://172.26.22.24:3000/api';
 
