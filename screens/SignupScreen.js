@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet } from 'react-native';
 
-export default function SignupScreen() {
+export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -19,6 +19,15 @@ export default function SignupScreen() {
   };
 
   const signUp = async () => {
+    try {
+      // Place your signup logic here
+      console.log('User successfully signed up!');
+    } catch (err) {
+      console.log('Error signing up:', err);
+    }
+  };
+
+  const signIn = async () => {
     try {
       // Place your signup logic here
       console.log('User successfully signed up!');
@@ -45,17 +54,9 @@ export default function SignupScreen() {
         placeholderTextColor='white'
         onChangeText={(val) => onChangeText('password', val)}
       />
-      {/* iffffffff there's time put check password function */}
-      {/* <TextInput
-        style={styles.input}
-        placeholder='Check Password'
-        secureTextEntry={true}
-        autoCapitalize='none'
-        placeholderTextColor='white'
-        onChangeText={(val) => onChangeText('password', val)}
-      /> */}
 
       <Button title='Sign Up' onPress={signUp} />
+      <Button title='Sign In' onPress={signIn} />
     </View>
   );
 }

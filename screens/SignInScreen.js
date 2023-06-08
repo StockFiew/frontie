@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Text, Alert, Button, TextInput, View, StyleSheet } from 'react-native';
 
-export default function LoginScreen() {
+export default function SignInScreen() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
@@ -12,7 +12,7 @@ export default function LoginScreen() {
   return (
     <View style={styles.container}>
       {/* <Text style={styles.headlinetext}>{props.text}</Text> */}
-      <Text>Login</Text>
+      <Text>Sign in</Text>
       <TextInput
         value={username}
         onChangeText={setUsername}
@@ -27,7 +27,7 @@ export default function LoginScreen() {
         style={styles.input}
       />
 
-      <Button title={'Login'} onPress={onLogin} />
+      <Button title={'Sign in'} onPress={onLogin} />
       <Button title={'Or Sign up now'} onPress={onLogin} />
     </View>
   );
