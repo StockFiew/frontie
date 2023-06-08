@@ -6,6 +6,7 @@ import SearchScreen from '../screens/SearchScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import { StyleSheet } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Login';
@@ -22,9 +23,14 @@ export default function BottomTabNavigator({ navigation, route }) {
         name='Stocks'
         component={StocksScreen}
         options={{
-          title: 'Stocks1',
+          title: 'Stocks',
+          // want to hide this !
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-trending-up' />
+            <TabBarIcon
+              focused={focused}
+              name='md-trending-up'
+              style={focused ? styles.selectedIcon : styles.unselectedIcon}
+            />
           ),
         }}
       />
@@ -32,27 +38,27 @@ export default function BottomTabNavigator({ navigation, route }) {
         name='Search'
         component={SearchScreen}
         options={{
-          title: 'Search1',
+          title: 'Search',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),
         }}
       />
       <BottomTab.Screen
-        name='SignIn'
+        name='Sign In'
         component={SignInScreen}
         options={{
-          title: 'SignIn1',
+          title: 'Sign in',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),
         }}
       />
       <BottomTab.Screen
-        name='SignUp'
+        name='Sign Up'
         component={SignUpScreen}
         options={{
-          title: 'SignUp1',
+          title: 'Sign up',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),
@@ -65,3 +71,12 @@ export default function BottomTabNavigator({ navigation, route }) {
 function getHeaderTitle(route) {
   return getFocusedRouteNameFromRoute(route) ?? INITIAL_ROUTE_NAME;
 }
+
+const styles = StyleSheet.create({
+  selectedIcon: {
+    color: '#8A2BE2', // 선택된 상태에 대한 색상
+  },
+  unselectedIcon: {
+    color: '#aba8a6', // 선택되지 않은 상태에 대한 색상
+  },
+});

@@ -9,12 +9,20 @@ import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
+const customTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#8A2BE2', // 보라색으로 변경
+  },
+};
+
 export default function App(props) {
   return (
     <View style={styles.container}>
       <StocksProvider>
         {Platform.OS === 'ios' && <StatusBar barStyle='default' />}
-        <NavigationContainer theme={DefaultTheme}>
+        <NavigationContainer theme={customTheme}>
           {/* change from DarkTheme to DefaultTheme */}
           <Stack.Navigator>
             <Stack.Screen name='Home' component={BottomTabNavigator} />

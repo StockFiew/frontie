@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, StyleSheet } from 'react-native';
+import { View, Button, TextInput, StyleSheet, Text } from 'react-native';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -38,11 +38,12 @@ export default function SignUpScreen() {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.title}>Sign up</Text>
       <TextInput
         style={styles.input}
         placeholder='Email'
         autoCapitalize='none'
-        placeholderTextColor='white'
+        placeholderTextColor='#FFFFFF'
         onChangeText={(val) => onChangeText('email', val)}
       />
 
@@ -51,31 +52,38 @@ export default function SignUpScreen() {
         placeholder='Password'
         secureTextEntry={true}
         autoCapitalize='none'
-        placeholderTextColor='white'
+        placeholderTextColor='#FFFFFF'
         onChangeText={(val) => onChangeText('password', val)}
       />
 
-      <Button title='Sign Up' onPress={signUp} />
-      <Button title='Sign In' onPress={signIn} />
+      <Button title='Sign Up' onPress={signUp} color='#8A2BE2' />
+      <Text>Or</Text>
+      <Button title='Sign In' onPress={signIn} color='#8A2BE2' />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  input: {
-    width: 350,
-    height: 55,
-    backgroundColor: '#42A5F5',
-    margin: 10,
-    padding: 8,
-    color: 'white',
-    borderRadius: 14,
-    fontSize: 18,
-    fontWeight: '500',
-  },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+  },
+  input: {
+    width: 300,
+    height: 55,
+    backgroundColor: '#8A2BE2',
+    margin: 10,
+    padding: 15,
+    color: 'white',
+    borderRadius: 14,
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });

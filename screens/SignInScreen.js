@@ -11,24 +11,24 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={styles.headlinetext}>{props.text}</Text> */}
-      <Text>Sign in</Text>
+      <Text style={styles.title}>Sign in</Text>
       <TextInput
         value={username}
         onChangeText={setUsername}
-        placeholder={'Username'}
+        placeholder='Username'
         style={styles.input}
       />
       <TextInput
         value={password}
         onChangeText={setPassword}
-        placeholder={'Password'}
+        placeholder='Password'
         secureTextEntry={true}
         style={styles.input}
       />
 
-      <Button title={'Sign in'} onPress={onLogin} />
-      <Button title={'Or Sign up now'} onPress={onLogin} />
+      <Button title='Sign in' onPress={onLogin} color='#8A2BE2' />
+      <Text>Or</Text>
+      <Button title='Sign up' onPress={onLogin} color='#8A2BE2' />
     </View>
   );
 }
@@ -38,7 +38,12 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#ecf0f1',
+    backgroundColor: '#FFFFFF',
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
   input: {
     width: 200,
