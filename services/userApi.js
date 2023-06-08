@@ -11,7 +11,7 @@ const userApi = {
             return response.User;
         } catch (error) {
             console.error(error);
-            throw new Error('Unable to fetch user data');
+            throw Error('Unable to fetch user data');
         }
     },
 
@@ -24,7 +24,7 @@ const userApi = {
             return await sendAuthenticatedRequest(`${BASE_URL}/users/update`, 'PUT', profileData);
         } catch (error) {
             console.error(error);
-            throw new Error('Unable to update user profile');
+            throw Error('Unable to update user profile');
         }
     },
 
@@ -95,13 +95,14 @@ const userApi = {
             if (!data.Error) {
                 const token = data.Token;
                 await AsyncStorage.setItem('token', token);
-                return data.User;
             } else {
-                throw new Error(data.Message);
+                console.error(data.Message);
+                throw Error(data.Message);
             }
-        } catch (err) {
+            return data.User;
+    } catch (err) {
             console.error(err);
-            throw new Error(err);
+            throw Error(err);
         }
     }
 }
