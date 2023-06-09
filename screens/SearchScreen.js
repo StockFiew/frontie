@@ -12,6 +12,7 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
+import { FMP_API_SECRET } from '@env';
 
 // (delete before submission) FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
 
