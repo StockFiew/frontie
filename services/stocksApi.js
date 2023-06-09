@@ -6,6 +6,13 @@ const stocksApi = require('alphavantage')({ key: process.env.ALPHA_VENTAGE_API_K
 // Simple examples
 // Use this to get the stock data from a symbol
 // don't call here, require the stocksApi and call it from there
+
+
+// READ THIS FULL DOCUMENT OF HOW TO USE THIS API
+// https://github.com/zackurben/alphavantage/blob/master/README.md
+
+
+
 // alpha.data.intraday(`msft`).then((data) => {
 //   console.log(data);
 // });
