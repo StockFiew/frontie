@@ -16,6 +16,7 @@ export default function SignInScreen() {
         value={username}
         onChangeText={setUsername}
         placeholder='Username'
+        placeholderTextColor='#F2F2F2'
         style={styles.input}
       />
       <TextInput
@@ -23,6 +24,7 @@ export default function SignInScreen() {
         onChangeText={setPassword}
         placeholder='Password'
         secureTextEntry={true}
+        placeholderTextColor='#F2F2F2'
         style={styles.input}
       />
 
@@ -36,21 +38,24 @@ export default function SignInScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#FFFFFF',
+    alignItems: 'center',
+    backgroundColor: '#F2F2F2',
+  },
+  input: {
+    width: 300,
+    height: 55,
+    backgroundColor: '#8A2BE2',
+    margin: 10,
+    padding: 15,
+    color: 'white',
+    borderRadius: 14,
+    fontSize: 15,
+    fontWeight: '500',
   },
   title: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-  },
-  input: {
-    width: 200,
-    height: 44,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: 'black',
-    marginBottom: 10,
   },
 });

@@ -10,14 +10,14 @@ export default function StocksScreen({ route }) {
   const { ServerURL, watchList } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
 
-  // (delete before submission) can put more code here
-
   useEffect(() => {
     // (delete before submission) FixMe: fetch stock data from the server
     // for any new symbols added to the watchlist
-    // and save in local StocksScreen state
+    // and save in local StocksScreen statev
     fetchStockData();
   }, [watchList]);
+
+  // (delete before submission) can put more code here
 
   const fetchStockData = async () => {
     try {
@@ -42,7 +42,7 @@ export default function StocksScreen({ route }) {
         renderItem={({ item }) => (
           <View style={styles.stockItem}>
             <Text>{item.symbol}</Text>
-            <Text>{item.name}</Text>
+            <Text>{item.companyName}</Text>
             {/* Display other stock information */}
           </View>
         )}

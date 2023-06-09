@@ -13,7 +13,6 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../services/fmpApi';
-import StocksScreen from './StocksScreen';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
@@ -64,7 +63,7 @@ export default function SearchScreen({ navigation }) {
 
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
-    navigation.navigate('Watchlist');
+    navigation.push('StocksScreen');
   };
 
   const renderSearchResult = ({ item }) => (

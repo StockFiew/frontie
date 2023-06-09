@@ -18,11 +18,11 @@ module.exports = function (api) {
   };
 };
 
-// (Delete below comments before submission!)
 // module.exports = function (api) {
 //   api.cache(true);
 //   return {
 //     presets: ['babel-preset-expo'],
 //   };
 // };
-// ^ original code
+// (bySue) ^ original code
+// (bySue)(Delete above comments before submission!)

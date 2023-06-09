@@ -45,7 +45,7 @@ export default function SignUpScreen() {
         style={styles.input}
         placeholder='Email'
         autoCapitalize='none'
-        placeholderTextColor='#FFFFFF'
+        placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('email', val)}
       />
 
@@ -54,7 +54,7 @@ export default function SignUpScreen() {
         placeholder='Password'
         secureTextEntry={true}
         autoCapitalize='none'
-        placeholderTextColor='#FFFFFF'
+        placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('password', val)}
       />
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F2F2F2',
   },
   input: {
     width: 300,

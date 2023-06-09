@@ -6,7 +6,6 @@ import SearchScreen from '../screens/SearchScreen';
 import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
-import { StyleSheet } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Sign In';

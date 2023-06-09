@@ -6,17 +6,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { StocksProvider } from './contexts/StocksContext';
 import 'react-native-gesture-handler';
+import StocksScreen from './screens/StocksScreen';
 
 const Stack = createStackNavigator();
-
-// plan to move TabBarIcon.js
-const customTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    primary: '#8A2BE2', // Change to purple
-  },
-};
 
 export default function App(props) {
   return (
@@ -31,7 +23,11 @@ export default function App(props) {
               component={BottomTabNavigator}
               options={{ headerShown: false }} // Hide the header
             />
-            {/* <Stack.Screen name='Home' component={BottomTabNavigator} /> */}
+            <Stack.Screen
+              name='Stocks'
+              component={StocksScreen}
+              options={{ headerShown: true, title: 'Stocks' }}
+            />
           </Stack.Navigator>
         </NavigationContainer>
       </StocksProvider>
