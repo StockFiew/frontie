@@ -12,7 +12,7 @@ export default function CompanyListScreen() {
 
   const fetchCompanyList = async () => {
     try {
-      const data = await api.testApi();
+      const data = await api.fmpApi();
       setCompanyList(data);
     } catch (error) {
       console.error('Error fetching company list:', error);

@@ -12,7 +12,9 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
+// import fmpApi2 from '../services/fmpApi';
 import api from '../services/fmpApi';
+import { getFmpApiData, getFmpNewsApiData } from '../services/fmpApi';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
@@ -24,10 +26,10 @@ export default function SearchScreen({ navigation }) {
 
   const fetchSymbolNames = async () => {
     try {
-      const data = await api.fmpApi();
+      const data = await api.fmpApi.getSymbols();
       setState((prevState) => ({
         ...prevState,
-        searchResults: data,
+        searchResults: data.symbols,
       }));
     } catch (error) {
       console.error('Error fetching symbol names:', error);
