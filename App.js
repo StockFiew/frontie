@@ -1,21 +1,31 @@
-import * as React from "react";
-import { Platform, StyleSheet, View, StatusBar } from "react-native";
-import { NavigationContainer, DarkTheme } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import BottomTabNavigator from "./navigation/BottomTabNavigator";
-import { StocksProvider } from "./contexts/StocksContext";
-import "react-native-gesture-handler";
+import * as React from 'react';
+import { Platform, StyleSheet, View, StatusBar } from 'react-native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+// change from DarkTheme to DefaultTheme
+import { createStackNavigator } from '@react-navigation/stack';
+import BottomTabNavigator from './navigation/BottomTabNavigator';
+import { StocksProvider } from './contexts/StocksContext';
+import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
+
+const customTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: '#8A2BE2', // 보라색으로 변경
+  },
+};
 
 export default function App(props) {
   return (
     <View style={styles.container}>
       <StocksProvider>
-        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
-        <NavigationContainer theme={DarkTheme}>
+        {Platform.OS === 'ios' && <StatusBar barStyle='default' />}
+        <NavigationContainer theme={customTheme}>
+          {/* change from DarkTheme to DefaultTheme */}
           <Stack.Navigator>
-            <Stack.Screen name="Home" component={BottomTabNavigator} />
+            <Stack.Screen name='Home' component={BottomTabNavigator} />
           </Stack.Navigator>
         </NavigationContainer>
       </StocksProvider>

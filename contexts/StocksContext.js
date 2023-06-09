@@ -1,10 +1,12 @@
-import React, { useState, useContext, useEffect } from "react";
-import { AsyncStorage } from "react-native";
+import React, { useState, useContext, useEffect } from 'react';
+import { AsyncStorage } from 'react-native';
 
 const StocksContext = React.createContext();
+//save stock information
 
 export const StocksProvider = ({ children }) => {
   const [state, setState] = useState([]);
+  // give stock info to children
 
   return (
     <StocksContext.Provider value={[state, setState]}>
@@ -15,7 +17,7 @@ export const StocksProvider = ({ children }) => {
 
 export const useStocksContext = () => {
   const [state, setState] = useContext(StocksContext);
-
+  // get value of StocksContext and return state and setState
   // can put more code here
 
   function addToWatchlist(newSymbol) {
@@ -26,5 +28,9 @@ export const useStocksContext = () => {
     // FixMe: Retrieve watchlist from persistent storage
   }, []);
 
-  return { ServerURL: 'http://131.181.190.87:3001', watchList: state,  addToWatchlist };
+  return {
+    ServerURL: 'http://131.181.190.87:3001',
+    watchList: state,
+    addToWatchlist,
+  };
 };
