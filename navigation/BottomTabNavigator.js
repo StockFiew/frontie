@@ -20,13 +20,11 @@ export default function BottomTabNavigator({ navigation, route }) {
   return (
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
-      tabBarOptions={{
-        // showLrabel: false,
-        // ^ code for hiding icon label
-        activeTintColor: '#8A2BE2', // 선택된 탭의 레이블 색상
-        inactiveTintColor: '#918e8e', // 선택되지 않은 탭의 레이블 색상
-        style: {
-          backgroundColor: '#fff', // 탭 바 배경색
+      screenOptions={{
+        tabBarActiveTintColor: '#8A2BE2', // Label color for the selected tab
+        tabBarInactiveTintColor: '#918e8e', // Label color for unselected tabs
+        tabBarStyle: {
+          display: 'flex',
         },
       }}
     >
