@@ -12,37 +12,24 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import fmpAPI from '../services/fmpApi';
-
-// import { FMP_API_SECRET } from '@env';
-// const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api
-// key=${FMP_API_SECRET}`;
-// ^ delete before submission
-// (delete before submission) FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
+// import fmpApi from '../services/fmpApi';
+import fmpApi2 from '../services/fmpApi';
 
 export default function SearchScreen({ navigation }) {
-  const { ServerURL, addToWatchlist } = useStocksContext();
+  const { addToWatchlist } = useStocksContext();
   const [state, setState] = useState({ searchText: '', searchResults: [] });
 
-  // (delete before submission) can put more code here
-
   useEffect(() => {
-    // (delete before submission) FixMe: fetch symbol names from the server and save in local SearchScreen state
     fetchSymbolNames();
   }, []);
 
   const fetchSymbolNames = async () => {
     try {
-      const response = await fetch(`${ServerURL}/stocks/symbols`);
-      if (response.ok) {
-        const data = await response.json();
-        setState((prevState) => ({
-          ...prevState,
-          searchResults: data.symbols,
-        }));
-      } else {
-        console.error('Failed to fetch symbol names');
-      }
+      const data = await fmpApi2.getSymbols();
+      setState((prevState) => ({
+        ...prevState,
+        searchResults: data.symbols,
+      }));
     } catch (error) {
       console.error('Error fetching symbol names:', error);
     }
@@ -70,8 +57,6 @@ export default function SearchScreen({ navigation }) {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {/* (delete before submission) FixMe: add children here! */}
-
         <View style={styles.searchContainer}>
           <Ionicons
             name='search'
@@ -97,8 +82,6 @@ export default function SearchScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  // (delete before submission) FixMe: add styles here ...
-  // (delete before submission) use scaleSize(x) to adjust sizes for small/large screens
   container: {
     flex: 1,
     padding: scaleSize(16),

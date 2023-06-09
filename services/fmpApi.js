@@ -1,3 +1,4 @@
+import axios from 'axios';
 import { FMP_API_SECRET } from '@env';
 // import { FinancialModelingPrep } from 'financialmodelingprep';
 
@@ -27,14 +28,53 @@ const fmpApi = require('financialmodelingprep')({ key: FMP_API_SECRET });
 // ^ original code
 // Change API_KEY to process.env.FMP_API_SECRET
 
+// const fmpNewsApi = (symbols) => {
+//   const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(
+//     ','
+//   )}&page=0&apikey=${FMP_API_SECRET}`;
+
+//   return fetch(url)
+//     .then((res) => res.json())
+//     .then((data) => console.log(data))
+//     .catch((err) => console.error(err));
+// };
+// ^ original code
+
 const fmpNewsApi = (symbols) => {
   const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(
     ','
   )}&page=0&apikey=${FMP_API_SECRET}`;
 
-  return fetch(url)
-    .then((res) => res.json())
-    .then((data) => console.log(data))
-    .catch((err) => console.error(err));
+  return axios
+    .get(url)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
 };
-export default { fmpApi, fmpNewsApi };
+
+// const fmpApi2 = () => {
+//   const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api
+// key=${FMP_API_SECRET}`;
+
+//   return fetch(url)
+//     .then((res) => res.json())
+//     .then((data) => console.log(data))
+//     .catch((err) => console.error(err));
+// };
+// ^ original code
+
+const fmpApi2 = () => {
+  const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
+
+  return axios
+    .get(url)
+    .then((res) => res.data)
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });
+};
+
+export default { fmpApi, fmpNewsApi, fmpApi2 };
