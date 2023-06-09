@@ -6,75 +6,85 @@ import {
   Keyboard,
   TextInput,
   FlatList,
+  TouchableOpacity,
+  Text,
 } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 
+// (delete before submission) FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
+
 export default function SearchScreen({ navigation }) {
   const { ServerURL, addToWatchlist } = useStocksContext();
-  const [state, setState] = useState({ query: '', results: [] });
+  const [state, setState] = useState({ searchText: '', searchResults: [] });
+
+  // (delete before submission) can put more code here
 
   useEffect(() => {
-    // FixMe: fetch symbol names from the server and save in local SearchScreen state
-    fetchSymbols();
+    // (delete before submission) FixMe: fetch symbol names from the server and save in local SearchScreen state
+    fetchSymbolNames();
   }, []);
 
-  const fetchSymbols = async () => {
+  const fetchSymbolNames = async () => {
     try {
-      const response = await fetch(`${ServerURL}/symbols`);
-      const data = await response.json();
-      setState((prevState) => ({
-        ...prevState,
-        results: data.symbols,
-      }));
+      const response = await fetch(`${ServerURL}/stocks/symbols`);
+      if (response.ok) {
+        const data = await response.json();
+        setState((prevState) => ({
+          ...prevState,
+          searchResults: data.symbols,
+        }));
+      } else {
+        console.error('Failed to fetch symbol names');
+      }
     } catch (error) {
-      console.log('Error fetching symbols:', error);
+      console.error('Error fetching symbol names:', error);
     }
   };
 
   const handleSearch = (text) => {
-    setState((prevState) => ({
-      ...prevState,
-      query: text,
-    }));
+    setState((prevState) => ({ ...prevState, searchText: text }));
   };
 
-  const handleSelectSymbol = (symbol) => {
+  const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
-    // FixMe: navigate to another screen or perform any other action after selecting a symbol
+    navigation.navigate('Watchlist');
   };
+
+  const renderSearchResult = ({ item }) => (
+    <TouchableOpacity
+      style={styles.resultItem}
+      onPress={() => handleAddToWatchlist(item.symbol)}
+    >
+      <Text style={styles.resultText}>{item.name}</Text>
+      <Text style={styles.resultSymbol}>{item.symbol}</Text>
+    </TouchableOpacity>
+  );
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
+        {/* (delete before submission) FixMe: add children here! */}
+
         <View style={styles.searchContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder='Search symbols...'
-            value={state.query}
-            onChangeText={handleSearch}
-          />
           <Ionicons
-            name='ios-search'
-            size={24}
+            name='search'
+            size={scaleSize(24)}
             color='black'
             style={styles.searchIcon}
           />
+          <TextInput
+            style={styles.searchInput}
+            placeholder='Search'
+            value={state.searchText}
+            onChangeText={handleSearch}
+          />
         </View>
         <FlatList
-          data={state.results}
+          data={state.searchResults}
+          renderItem={renderSearchResult}
           keyExtractor={(item) => item.symbol}
-          renderItem={({ item }) => (
-            <TouchableWithoutFeedback
-              onPress={() => handleSelectSymbol(item.symbol)}
-            >
-              <View style={styles.itemContainer}>
-                <Text>{item.symbol}</Text>
-                <Text>{item.name}</Text>
-              </View>
-            </TouchableWithoutFeedback>
-          )}
         />
       </View>
     </TouchableWithoutFeedback>
@@ -82,6 +92,8 @@ export default function SearchScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+  // (delete before submission) FixMe: add styles here ...
+  // (delete before submission) use scaleSize(x) to adjust sizes for small/large screens
   container: {
     flex: 1,
     padding: scaleSize(16),
@@ -90,22 +102,28 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: scaleSize(16),
-    paddingHorizontal: scaleSize(8),
-    backgroundColor: '#e0e0e0',
+    backgroundColor: '#F2F2F2',
     borderRadius: scaleSize(8),
-  },
-  input: {
-    flex: 1,
-    height: scaleSize(40),
+    paddingHorizontal: scaleSize(8),
   },
   searchIcon: {
-    paddingHorizontal: scaleSize(8),
+    marginRight: scaleSize(8),
   },
-  itemContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+  searchInput: {
+    flex: 1,
+    fontSize: scaleSize(16),
+  },
+  resultItem: {
     paddingVertical: scaleSize(8),
     borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
+    borderBottomColor: '#CCCCCC',
+  },
+  resultText: {
+    fontSize: scaleSize(16),
+    fontWeight: 'bold',
+  },
+  resultSymbol: {
+    fontSize: scaleSize(12),
+    color: '#666666',
   },
 });
