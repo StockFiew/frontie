@@ -12,9 +12,9 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import { FMP_API_SECRET } from '@env';
-const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api
-key=${FMP_API_SECRET}`;
+// import { FMP_API_SECRET } from '@env';
+// const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api
+// key=${FMP_API_SECRET}`;
 
 // (delete before submission) FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
 
