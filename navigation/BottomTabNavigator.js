@@ -8,8 +8,6 @@ import SignUpScreen from '../screens/SignUpScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
-import CompanyListScreen from '../screens/CompanyListScreen';
-
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Sign In';
 // change home screen to Sign In temporarily
@@ -30,16 +28,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         },
       }}
     >
-      <BottomTab.Screen
-        name='Test'
-        component={CompanyListScreen}
-        options={{
-          title: 'Test',
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-trending-up' />
-          ),
-        }}
-      />
       <BottomTab.Screen
         name='Stocks'
         component={StocksScreen}

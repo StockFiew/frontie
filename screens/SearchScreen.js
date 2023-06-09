@@ -13,6 +13,7 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 import api from '../services/fmpApi';
+import StocksScreen from './StocksScreen';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
@@ -44,7 +45,7 @@ export default function SearchScreen({ navigation }) {
     if (text === '') {
       setState((prevState) => ({
         ...prevState,
-        searchResults: prevState.originalResults, // 초기 검색 결과로 복원
+        searchResults: prevState.originalResults, // Restore to initial search results
       }));
     } else {
       filterSearchResults(text);
@@ -52,7 +53,7 @@ export default function SearchScreen({ navigation }) {
   };
 
   const filterSearchResults = (text) => {
-    const { originalResults } = state; // 원본 검색 결과를 가져옴
+    const { originalResults } = state; // Get original search results
     const filteredResults = originalResults.filter(
       (item) =>
         item.companyName.toLowerCase().includes(text.toLowerCase()) ||
