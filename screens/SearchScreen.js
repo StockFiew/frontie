@@ -64,6 +64,7 @@ export default function SearchScreen({ navigation }) {
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
     navigation.push('StocksScreen');
+    // ^^^ don't know what to do....................!
   };
 
   const renderSearchResult = ({ item }) => (
