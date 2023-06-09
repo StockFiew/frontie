@@ -9,8 +9,8 @@ import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import { StyleSheet } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Login';
-// chage home screen
+const INITIAL_ROUTE_NAME = 'Sign In';
+// change home screen
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
@@ -29,7 +29,8 @@ export default function BottomTabNavigator({ navigation, route }) {
             <TabBarIcon
               focused={focused}
               name='md-trending-up'
-              style={focused ? styles.selectedIcon : styles.unselectedIcon}
+              // style={focused ? styles.selectedIcon : styles.unselectedIcon}
+              // plan to move in tabBarIcon.js
             />
           ),
         }}
@@ -48,7 +49,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name='Sign In'
         component={SignInScreen}
         options={{
-          title: 'Sign in',
+          title: 'Sign In',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),
@@ -58,7 +59,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         name='Sign Up'
         component={SignUpScreen}
         options={{
-          title: 'Sign up',
+          title: 'Sign Up',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),
@@ -72,11 +73,12 @@ function getHeaderTitle(route) {
   return getFocusedRouteNameFromRoute(route) ?? INITIAL_ROUTE_NAME;
 }
 
+// plan to move tabBarIcon.js
 const styles = StyleSheet.create({
   selectedIcon: {
-    color: '#8A2BE2', // 선택된 상태에 대한 색상
+    color: '#8A2BE2', // Color for the selected state
   },
   unselectedIcon: {
-    color: '#aba8a6', // 선택되지 않은 상태에 대한 색상
+    color: '#aba8a6', // Color for unselected state
   },
 });
