@@ -10,11 +10,11 @@ const fmpApi = require('financialmodelingprep')(process.env.FMP_API_SECRET)
 
 
 // Only use this when you need the news from stock symbols. the parameter is a list.
-export const fmpNewsApi = (symbols) => {
+const fmpNewsApi = (symbols) => {
   const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(',')}&page=0&apikey=${API_KEY}`;
   return fetch(url)
     .then(res => res.json())
     .then(data => console.log(data))
     .catch(err => console.error(err));
 }
-export default fmpApi;
+export default { fmpApi, fmpNewsApi };
