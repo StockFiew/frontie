@@ -1,6 +1,5 @@
-const API_KEY = '6b5e8bedc6de039791e6bbd72013e79d'
-
-const fmpApi = require('financialmodelingprep')(API_KEY)
+require('dotenv').config();
+const fmpApi = require('financialmodelingprep')(process.env.FMP_API_SECRET)
 // Official API documentation
 // if you need to use an endpoint that is not supported by the wrapper
 // use this to find the endpoints you need.
