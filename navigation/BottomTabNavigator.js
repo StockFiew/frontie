@@ -10,7 +10,7 @@ import { StyleSheet } from 'react-native';
 
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Sign In';
-// change home screen
+// change home screen to Sign In temporarily
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {

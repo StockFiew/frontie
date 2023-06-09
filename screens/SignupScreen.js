@@ -12,6 +12,8 @@ export default function SignUpScreen() {
         break;
       case 'password':
         setPassword(val);
+        // Password must contain at least one Capital letter, and number.
+        // The length must be between 8 and 15 characters.
         break;
       default:
         break;
