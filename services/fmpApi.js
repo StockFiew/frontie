@@ -1,12 +1,13 @@
 import { FMP_API_SECRET } from '@env';
-import { FinancialModelingPrep } from 'financialmodelingprep';
+// import { FinancialModelingPrep } from 'financialmodelingprep';
 
 // require('dotenv').config();
 // const fmpApi = require('financialmodelingprep')(process.env.FMP_API_SECRET);
 // ^ original code
 // The require('dotenv').config() function is not supported in Expo, and using it will result in an error.
 
-const fmpApi = FinancialModelingPrep(FMP_API_SECRET);
+// const fmpApi = FinancialModelingPrep(FMP_API_SECRET);
+const fmpApi = require('financialmodelingprep')({ key: FMP_API_SECRET });
 // const fmpApi = require('financialmodelingprep')(FMP_API_SECRET);
 // ^ original code
 // Official API documentation
