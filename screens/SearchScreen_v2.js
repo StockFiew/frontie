@@ -13,19 +13,14 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 import { FMP_API_SECRET } from '@env';
-const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api
-key=${FMP_API_SECRET}`;
 
-// (delete before submission) FixMe: implement other components and functions used in SearchScreen here (don't just put all the JSX in SearchScreen below)
+const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
 
 export default function SearchScreen({ navigation }) {
   const { ServerURL, addToWatchlist } = useStocksContext();
   const [state, setState] = useState({ searchText: '', searchResults: [] });
 
-  // (delete before submission) can put more code here
-
   useEffect(() => {
-    // (delete before submission) FixMe: fetch symbol names from the server and save in local SearchScreen state
     fetchSymbolNames();
   }, []);
 
@@ -55,6 +50,29 @@ export default function SearchScreen({ navigation }) {
     navigation.navigate('Watchlist');
   };
 
+  const fetchSymbolData = async () => {
+    try {
+      const response = await fetch(url);
+      if (response.ok) {
+        const data = await response.json();
+        // Filter the search results based on the searchText
+        const filteredResults = data.filter(
+          (item) =>
+            item.symbol.includes(state.searchText) ||
+            item.name.includes(state.searchText)
+        );
+        setState((prevState) => ({
+          ...prevState,
+          searchResults: filteredResults,
+        }));
+      } else {
+        console.error('Failed to fetch symbol data');
+      }
+    } catch (error) {
+      console.error('Error fetching symbol data:', error);
+    }
+  };
+
   const renderSearchResult = ({ item }) => (
     <TouchableOpacity
       style={styles.resultItem}
@@ -65,11 +83,13 @@ export default function SearchScreen({ navigation }) {
     </TouchableOpacity>
   );
 
+  useEffect(() => {
+    fetchSymbolData();
+  }, [state.searchText]); // Fetch symbol data whenever the searchText changes
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
-        {/* (delete before submission) FixMe: add children here! */}
-
         <View style={styles.searchContainer}>
           <Ionicons
             name='search'
@@ -95,8 +115,6 @@ export default function SearchScreen({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-  // (delete before submission) FixMe: add styles here ...
-  // (delete before submission) use scaleSize(x) to adjust sizes for small/large screens
   container: {
     flex: 1,
     padding: scaleSize(16),
