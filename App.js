@@ -9,11 +9,12 @@ import 'react-native-gesture-handler';
 
 const Stack = createStackNavigator();
 
+// plan to move TabBarIcon.js
 const customTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: '#8A2BE2', // 보라색으로 변경
+    primary: '#8A2BE2', // Change to purple
   },
 };
 
@@ -22,7 +23,7 @@ export default function App(props) {
     <View style={styles.container}>
       <StocksProvider>
         {Platform.OS === 'ios' && <StatusBar barStyle='default' />}
-        <NavigationContainer theme={customTheme}>
+        <NavigationContainer theme={DefaultTheme}>
           {/* change from DarkTheme to DefaultTheme */}
           <Stack.Navigator>
             <Stack.Screen name='Home' component={BottomTabNavigator} />
