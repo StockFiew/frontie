@@ -1,8 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import sendAuthenticatedRequest from "./api";
-
+require('dotenv').config();
 // fill in QUT virtual machine IP
-const BASE_URL = 'https://172.26.22.24:3000/api';
+
+const BASE_URL = process.env.API_URL;
 
 const userApi = {
     async fetchUserData() {
