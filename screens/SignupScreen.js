@@ -89,3 +89,37 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
 });
+
+/*
+    Example
+    const RegisterScreen = () => {
+        const [email, setEmail] = useState('');
+        const [password, setPassword] = useState('');
+
+        const handleRegister = async () => {
+            try {
+                const user = await registerUser(email, password);
+                console.log('Registered user:', user);
+            } catch (error) {
+                console.error(error);
+            }
+        };
+
+        return (
+            <View>
+                <TextInput
+                    placeholder="Email"
+                    value={email}
+                    onChangeText={setEmail}
+                />
+                <TextInput
+                    placeholder="Password"
+                    value={password}
+                    onChangeText={setPassword}
+                    secureTextEntry
+                />
+                <Button title="Register" onPress={handleRegister} />
+            </View>
+        );
+    };
+    */

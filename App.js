@@ -26,7 +26,12 @@ export default function App(props) {
         <NavigationContainer theme={DefaultTheme}>
           {/* change from DarkTheme to DefaultTheme */}
           <Stack.Navigator>
-            <Stack.Screen name='Home' component={BottomTabNavigator} />
+            <Stack.Screen
+              name='Home'
+              component={BottomTabNavigator}
+              options={{ headerShown: false }} // Hide the header
+            />
+            {/* <Stack.Screen name='Home' component={BottomTabNavigator} /> */}
           </Stack.Navigator>
         </NavigationContainer>
       </StocksProvider>

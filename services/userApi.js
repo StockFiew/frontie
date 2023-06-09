@@ -4,11 +4,10 @@ import { API_URL } from '@env';
 
 // require('dotenv').config()
 // ^ original code
-
-// fill in QUT virtual machine IP
-
 // The require('dotenv').config() function is not supported in Expo,
 // and using it will result in an error(from ChatGPT).
+
+// fill in QUT virtual machine IP
 
 const BASE_URL = API_URL;
 // const BASE_URL = process.env.API_URL;

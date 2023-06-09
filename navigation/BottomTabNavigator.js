@@ -18,7 +18,18 @@ export default function BottomTabNavigator({ navigation, route }) {
   }, [navigation, route]);
 
   return (
-    <BottomTab.Navigator initialRouteName={INITIAL_ROUTE_NAME}>
+    <BottomTab.Navigator
+      initialRouteName={INITIAL_ROUTE_NAME}
+      tabBarOptions={{
+        // showLrabel: false,
+        // ^ code for hiding icon label
+        activeTintColor: '#8A2BE2', // 선택된 탭의 레이블 색상
+        inactiveTintColor: '#918e8e', // 선택되지 않은 탭의 레이블 색상
+        style: {
+          backgroundColor: '#fff', // 탭 바 배경색
+        },
+      }}
+    >
       <BottomTab.Screen
         name='Stocks'
         component={StocksScreen}
@@ -26,12 +37,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           title: 'Stocks',
           // want to hide this !
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon
-              focused={focused}
-              name='md-trending-up'
-              // style={focused ? styles.selectedIcon : styles.unselectedIcon}
-              // plan to move in tabBarIcon.js
-            />
+            <TabBarIcon focused={focused} name='md-trending-up' />
           ),
         }}
       />
@@ -72,13 +78,3 @@ export default function BottomTabNavigator({ navigation, route }) {
 function getHeaderTitle(route) {
   return getFocusedRouteNameFromRoute(route) ?? INITIAL_ROUTE_NAME;
 }
-
-// plan to move tabBarIcon.js
-const styles = StyleSheet.create({
-  selectedIcon: {
-    color: '#8A2BE2', // Color for the selected state
-  },
-  unselectedIcon: {
-    color: '#aba8a6', // Color for unselected state
-  },
-});
