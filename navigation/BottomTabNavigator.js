@@ -33,7 +33,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={StocksScreen}
         options={{
           title: 'Stocks',
-          // want to hide this !
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-trending-up' />
           ),

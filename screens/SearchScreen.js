@@ -12,7 +12,7 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import fmpApi from '../services/fmpApi';
+import fmpAPI from '../services/fmpApi';
 
 // import { FMP_API_SECRET } from '@env';
 // const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=10000&exchange=NASDAQ&dividendMoreThan=&api

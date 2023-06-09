@@ -25,7 +25,7 @@ const fmpApi = require('financialmodelingprep')({ key: FMP_API_SECRET });
 //     ','
 //   )}&page=0&apikey=${API_KEY}`;
 // ^ original code
-// Change API_KEY to process.env.FMP_API_SECRET??
+// Change API_KEY to process.env.FMP_API_SECRET
 
 const fmpNewsApi = (symbols) => {
   const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(
