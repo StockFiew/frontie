@@ -16,7 +16,11 @@ import api from '../services/fmpApi';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
-  const [state, setState] = useState({ searchText: '', searchResults: [] });
+  const [state, setState] = useState({
+    searchText: '',
+    searchResults: [],
+    originalResults: [],
+  });
 
   useEffect(() => {
     fetchSymbolNames();
@@ -28,6 +32,7 @@ export default function SearchScreen({ navigation }) {
       setState((prevState) => ({
         ...prevState,
         searchResults: data,
+        originalResults: data,
       }));
     } catch (error) {
       console.error('Error fetching symbol names:', error);
@@ -36,6 +41,24 @@ export default function SearchScreen({ navigation }) {
 
   const handleSearch = (text) => {
     setState((prevState) => ({ ...prevState, searchText: text }));
+    if (text === '') {
+      setState((prevState) => ({
+        ...prevState,
+        searchResults: prevState.originalResults, // 초기 검색 결과로 복원
+      }));
+    } else {
+      filterSearchResults(text);
+    }
+  };
+
+  const filterSearchResults = (text) => {
+    const { originalResults } = state; // 원본 검색 결과를 가져옴
+    const filteredResults = originalResults.filter(
+      (item) =>
+        item.companyName.toLowerCase().includes(text.toLowerCase()) ||
+        item.symbol.toLowerCase().includes(text.toLowerCase())
+    );
+    setState((prevState) => ({ ...prevState, searchResults: filteredResults }));
   };
 
   const handleAddToWatchlist = (symbol) => {
