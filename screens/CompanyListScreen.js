@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, FlatList, Text } from 'react-native';
 
-import testApi from '../services/testApi';
+import api from '../services/fmpApi';
 
 export default function CompanyListScreen() {
   const [companyList, setCompanyList] = useState([]);
@@ -12,7 +12,7 @@ export default function CompanyListScreen() {
 
   const fetchCompanyList = async () => {
     try {
-      const data = await testApi();
+      const data = await api.testApi();
       setCompanyList(data);
     } catch (error) {
       console.error('Error fetching company list:', error);
