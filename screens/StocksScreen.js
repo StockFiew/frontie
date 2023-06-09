@@ -3,16 +3,16 @@ import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 
-// FixMe: implement other components and functions used in StocksScreen here (don't just put all the JSX in StocksScreen below)
+// (delete before submission) FixMe: implement other components and functions used in StocksScreen here (don't just put all the JSX in StocksScreen below)
 
 export default function StocksScreen({ route }) {
   const { ServerURL, watchList } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
 
-  // can put more code here
+  // (delete before submission) can put more code here
 
   useEffect(() => {
-    // FixMe: fetch stock data from the server for any new symbols added to the watchlist and save in local StocksScreen state
+    // (delete before submission) FixMe: fetch stock data from the server for any new symbols added to the watchlist and save in local StocksScreen state
     fetchStockData();
   }, [watchList]);
 
@@ -31,6 +31,8 @@ export default function StocksScreen({ route }) {
 
   return (
     <View style={styles.container}>
+      {/* (delete before submission) FixMe: add children here! */}
+
       <FlatList
         data={state.stocksData}
         keyExtractor={(item) => item.symbol}
@@ -47,6 +49,8 @@ export default function StocksScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
+  // (delete before submission) FixMe: add styles here ...
+  // (delete before submission) use scaleSize(x) to adjust sizes for small/large screens
   container: {
     flex: 1,
     padding: scaleSize(16),
