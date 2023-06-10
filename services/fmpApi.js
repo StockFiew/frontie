@@ -24,9 +24,7 @@ import { FMP_API_SECRET } from '@env';
 // Only use this when you need the news from stock symbols. the parameter is a list.
 
 const fmpApi = () => {
-  const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=
-  1000000000&betaMoreThan=1&volumeMoreThan=
-  100000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
+  const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=1000000000&betaMoreThan=1&volumeMoreThan=100000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
 
   return axios
     .get(url)
