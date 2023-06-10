@@ -1,9 +1,25 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Text } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const navigation = useNavigation();
+
+  const onSignUp = async () => {
+    try {
+      // Place your signup logic here
+      console.log('User successfully signed up!');
+    } catch (err) {
+      console.log('Error signing up:', err);
+    }
+  };
+
+  const onSignIn = () => {
+    navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
+  };
 
   const onChangeText = (key, val) => {
     switch (key) {
@@ -41,6 +57,8 @@ export default function SignUpScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
+      <Text style={styles.text}>Type your email address</Text>
+
       <TextInput
         style={styles.input}
         placeholder='Email'
@@ -48,7 +66,7 @@ export default function SignUpScreen() {
         placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('email', val)}
       />
-
+      <Text style={styles.text}>Type your email password</Text>
       <TextInput
         style={styles.input}
         placeholder='Password'
@@ -58,9 +76,9 @@ export default function SignUpScreen() {
         onChangeText={(val) => onChangeText('password', val)}
       />
 
-      <Button title='Sign Up' onPress={signUp} color='#8A2BE2' />
-      <Text>Or</Text>
-      <Button title='Sign In' onPress={signIn} color='#8A2BE2' />
+      <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
+      <Text style={styles.text}>If you are a member</Text>
+      <Button title='Sign in here' onPress={onSignIn} color='#000000' />
     </View>
   );
 }
@@ -72,8 +90,23 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
   },
+  container2: {
+    flex: 0.5,
+    width: 310,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#292828',
+    borderRadius: 20,
+  },
+
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#000000',
+  },
   input: {
-    width: 300,
+    width: 260,
     height: 55,
     backgroundColor: '#8A2BE2',
     margin: 10,
@@ -83,10 +116,9 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  text: {
+    color: '#000000', // Specify the color here
+    fontSize: 12,
   },
 });
 

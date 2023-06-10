@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Text, Alert, Button, TextInput, View, StyleSheet } from 'react-native';
+import {
+  Text,
+  Alert,
+  Button,
+  TextInput,
+  View,
+  StyleSheet,
+  Image,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import icon from '../assets/images/icon.png'; // Relative path to the image
+import logo from '../assets/images/icon.png'; // Relative path to the image
 
 export default function SignInScreen() {
   const [username, setUsername] = useState('');
@@ -20,28 +28,29 @@ export default function SignInScreen() {
 
   return (
     <View style={styles.container}>
-      <Image source={icon} style={styles.logo} />
+      <Image source={logo} style={styles.logo} />
+      <View style={styles.container2}>
+        <Text style={styles.title}>Sign in</Text>
+        <TextInput
+          value={username}
+          onChangeText={setUsername}
+          placeholder='Username'
+          placeholderTextColor='#F2F2F2'
+          style={styles.input}
+        />
+        <TextInput
+          value={password}
+          onChangeText={setPassword}
+          placeholder='Password'
+          secureTextEntry={true}
+          placeholderTextColor='#F2F2F2'
+          style={styles.input}
+        />
 
-      <Text style={styles.title}>Sign in</Text>
-      <TextInput
-        value={username}
-        onChangeText={setUsername}
-        placeholder='Username'
-        placeholderTextColor='#F2F2F2'
-        style={styles.input}
-      />
-      <TextInput
-        value={password}
-        onChangeText={setPassword}
-        placeholder='Password'
-        secureTextEntry={true}
-        placeholderTextColor='#F2F2F2'
-        style={styles.input}
-      />
-
-      <Button title='Sign in' onPress={onSignIn} color='#8A2BE2' />
-      <Text>Or</Text>
-      <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
+        <Button title='Sign in' onPress={onSignIn} color='#8A2BE2' />
+        <Text style={styles.text}>If you are not a member yet</Text>
+        <Button title='Sign up here' onPress={onSignUp} color='#000000' />
+      </View>
     </View>
   );
 }
@@ -53,8 +62,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
   },
+  container2: {
+    flex: 0.5,
+    width: 310,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#e6e6ee',
+    borderRadius: 20,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 20,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#000000',
+  },
   input: {
-    width: 300,
+    width: 260,
     height: 55,
     backgroundColor: '#8A2BE2',
     margin: 10,
@@ -64,9 +92,8 @@ const styles = StyleSheet.create({
     fontSize: 15,
     fontWeight: '500',
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
+  text: {
+    color: '#525050',
+    fontSize: 12,
   },
 });
