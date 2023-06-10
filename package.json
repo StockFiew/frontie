@@ -19,6 +19,7 @@
     "axios": "^1.4.0",
     "dotenv": "^16.1.4",
     "expo": "^48.0.19",
+    "expo-constants": "~14.2.1",
     "expo-device": "^5.2.1",
     "expo-status-bar": "~1.4.4",
     "financialmodelingprep": "^1.1.0",

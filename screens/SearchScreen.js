@@ -20,6 +20,7 @@ export default function SearchScreen({ navigation }) {
     searchText: '',
     searchResults: [],
     originalResults: [],
+    showNoResults: false, // Add showNoResults state
   });
 
   useEffect(() => {
@@ -59,14 +60,18 @@ export default function SearchScreen({ navigation }) {
         item.companyName.toLowerCase().includes(text.toLowerCase()) ||
         item.symbol.toLowerCase().includes(text.toLowerCase())
     );
-    setState((prevState) => ({ ...prevState, searchResults: filteredResults }));
+    setState((prevState) => ({
+      ...prevState,
+      searchResults: filteredResults,
+      showNoResults: filteredResults.length === 0, // Update showNoResults state
+    }));
   };
 
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
     console.log(symbol);
     // navigation.push('StocksScreen');
-    // don't have to do it now user can navigate
+    // ^ have to figure it out(mentioned in ass spec)
   };
 
   const renderSearchResult = ({ item }) => (
@@ -96,11 +101,15 @@ export default function SearchScreen({ navigation }) {
             onChangeText={handleSearch}
           />
         </View>
-        <FlatList
-          data={state.searchResults}
-          renderItem={renderSearchResult}
-          keyExtractor={(item) => item.symbol}
-        />
+        {state.showNoResults ? (
+          <Text style={styles.noResultsText}>No results found</Text>
+        ) : (
+          <FlatList
+            data={state.searchResults}
+            renderItem={renderSearchResult}
+            keyExtractor={(item) => item.symbol}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );
@@ -137,6 +146,12 @@ const styles = StyleSheet.create({
   },
   resultSymbol: {
     fontSize: scaleSize(12),
+    color: '#666666',
+  },
+  noResultsText: {
+    textAlign: 'center',
+    fontSize: scaleSize(16),
+    marginTop: scaleSize(16),
     color: '#666666',
   },
 });

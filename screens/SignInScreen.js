@@ -9,7 +9,7 @@ import {
   Image,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import logo from '../assets/images/icon.png'; // Relative path to the image
+import logo from '../assets/images/icon_trans.png'; // Relative path to the image
 
 export default function SignInScreen() {
   const [username, setUsername] = useState('');
