@@ -11,9 +11,12 @@ export default function SignUpScreen() {
 
   const onSignUp = async () => {
     try {
-      // Place your signup logic here
+      // Signup logic starts here
       const user = await registerUser(email, password);
+      // can't load registerUser..maybe i can't figure it out api...
       console.log('Registered user:', user);
+      console.log('User successfully signed up!');
+      // ^ for the test
       Alert.alert('Welcome!', 'Your sign up has been completed');
       navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
     } catch (err) {
@@ -52,7 +55,7 @@ export default function SignUpScreen() {
         placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('email', val)}
       />
-      <Text style={styles.text}>Type your email password</Text>
+      <Text style={styles.text}>Type your password</Text>
       <TextInput
         style={styles.input}
         placeholder='Password'
@@ -61,12 +64,16 @@ export default function SignUpScreen() {
         placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('password', val)}
       />
+      <Text style={styles.text2}>
+        - At least one capital letter and number{'\n'}- Between 8 and 15
+        characters.{'\n'}
+      </Text>
       <View style={{ marginVertical: 5 }}>
         <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
       </View>
 
       <Text style={styles.text2}>If you are a member</Text>
-      <View style={{ marginVertical: 10 }}>
+      <View style={{ marginVertical: 13 }}>
         <Button title='Sign in here' onPress={onSignIn} color='#525050' />
       </View>
     </View>
@@ -110,12 +117,12 @@ const styles = StyleSheet.create({
     color: '#000000',
     fontSize: 14,
     marginTop: 10,
-    // marginBottom:,
   },
   text2: {
+    textAlign: 'center',
     color: '#525050',
+    width: 260,
     fontSize: 14,
-    marginTop: 10,
     marginBottom: -7,
   },
 });

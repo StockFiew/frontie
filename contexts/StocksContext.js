@@ -1,5 +1,4 @@
 import React, { useState, useContext, useEffect } from 'react';
-// import { AsyncStorage } from '@react-native-async-storage/async-storage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 // Change from 'react-native' to '@react-native-async-storage/async-storage'
 

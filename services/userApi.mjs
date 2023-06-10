@@ -42,6 +42,7 @@ const userApi = {
   },
 
   /*
+  (BySue) I used this template. Thank you Benji
     Example
     const RegisterScreen = () => {
         const [email, setEmail] = useState('');

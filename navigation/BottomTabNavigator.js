@@ -11,7 +11,7 @@ import TestScreen from '../screens/TestScreen';
 // ^ TestScreen will be deleted
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Search';
+const INITIAL_ROUTE_NAME = 'Stocks';
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
