@@ -65,8 +65,8 @@ export default function TestScreen({ navigation }) {
 
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
-    navigation.push('StocksScreen');
-    // don't have to do it now user can navigate
+    // navigation.push('StocksScreen');
+    // when user click the stock, automatically move to stocksscreen
   };
 
   const renderSearchResult = ({ item }) => (

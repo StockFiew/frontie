@@ -64,7 +64,8 @@ export default function SearchScreen({ navigation }) {
 
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
-    navigation.push('StocksScreen');
+    console.log(symbol);
+    // navigation.push('StocksScreen');
     // don't have to do it now user can navigate
   };
 
