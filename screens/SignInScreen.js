@@ -51,7 +51,7 @@ export default function SignInScreen() {
           <Button title='Sign in' onPress={onSignIn} color='#8A2BE2' />
         </View>
         <Text style={styles.text}>If you are not a member yet</Text>
-        <View style={{ marginVertical: 15 }}>
+        <View style={{ marginVertical: 10 }}>
           <Button title='Sign up here' onPress={onSignUp} color='#525050' />
         </View>
       </View>
@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
   },
   container2: {
-    flex: 0.5,
+    flex: 0.55,
     width: 310,
     justifyContent: 'center',
     alignItems: 'center',

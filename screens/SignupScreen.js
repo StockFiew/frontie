@@ -66,7 +66,7 @@ export default function SignUpScreen() {
       </View>
 
       <Text style={styles.text2}>If you are a member</Text>
-      <View style={{ marginVertical: 15 }}>
+      <View style={{ marginVertical: 10 }}>
         <Button title='Sign in here' onPress={onSignIn} color='#525050' />
       </View>
     </View>
