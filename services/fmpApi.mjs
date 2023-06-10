@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { FMP_API_SECRET } from '@env';
+
 // import { FinancialModelingPrep } from 'financialmodelingprep';
 //  (bySue) ^ expo doesn't support above module
 

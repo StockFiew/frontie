@@ -8,7 +8,7 @@ import { ALPHA_VENTAGE_API_KEY } from '@env';
 
 // const alpha = require('alphavantage')({ key: 'B96T0ORJMAO31936' });
 
-// const stocksApi = require('alphavantage')({ key: process.env.ALPHA_VENTAGE_API_KEY})
+// const stocksApi = require('alphavantage')({ key: process.env.ALPHA_VENTAGE_API_KEY});
 // (bySue)^ original code
 // (bySue) const stocksApi = require('alphavantage')({ key: ALPHA_VENTAGE_API_KEY });
 // (bySue) ^ tried this but didn't work

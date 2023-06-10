@@ -12,9 +12,10 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../services/fmpApi.mjs';
 
-export default function SearchScreen({ navigation }) {
+import testApi from '../services/testApi.mjs';
+
+export default function TestScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
   const [state, setState] = useState({
     searchText: '',
@@ -28,7 +29,7 @@ export default function SearchScreen({ navigation }) {
 
   const fetchSymbolNames = async () => {
     try {
-      const data = await api.fmpApi();
+      const data = await testApi();
       // ^ part using fmpAPi
       setState((prevState) => ({
         ...prevState,

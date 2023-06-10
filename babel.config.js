@@ -1,3 +1,14 @@
+// (bySue)(To me, Delete unneccessary comments before submission!)
+
+// module.exports = function (api) {
+//   api.cache(true);
+//   return {
+//     presets: ['babel-preset-expo'],
+//   };
+// };
+
+// ^ original code
+
 module.exports = function (api) {
   api.cache(true);
   return {
@@ -17,12 +28,3 @@ module.exports = function (api) {
     ],
   };
 };
-
-// module.exports = function (api) {
-//   api.cache(true);
-//   return {
-//     presets: ['babel-preset-expo'],
-//   };
-// };
-// (bySue) ^ original code
-// (bySue)(Delete above comments before submission!)
