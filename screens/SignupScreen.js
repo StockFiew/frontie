@@ -61,10 +61,14 @@ export default function SignUpScreen() {
         placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('password', val)}
       />
+      <View style={{ marginVertical: 5 }}>
+        <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
+      </View>
 
-      <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
       <Text style={styles.text2}>If you are a member</Text>
-      <Button title='Sign in here' onPress={onSignIn} color='#525050' />
+      <View style={{ marginVertical: 15 }}>
+        <Button title='Sign in here' onPress={onSignIn} color='#525050' />
+      </View>
     </View>
   );
 }
@@ -110,7 +114,7 @@ const styles = StyleSheet.create({
   },
   text2: {
     color: '#525050',
-    fontSize: 13,
+    fontSize: 14,
     marginTop: 10,
     marginBottom: -7,
   },
