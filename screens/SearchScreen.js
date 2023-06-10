@@ -2,117 +2,74 @@ import React, { useState, useEffect } from 'react';
 import {
   StyleSheet,
   View,
-  TouchableWithoutFeedback,
-  Keyboard,
-  TextInput,
-  FlatList,
-  TouchableOpacity,
   Text,
+  FlatList,
+  TextInput,
+  TouchableOpacity,
 } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
-import { Ionicons } from '@expo/vector-icons';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
+import { FMP_API_SECRET } from '@env';
 
-export default function SearchScreen({ navigation }) {
-  const { addToWatchlist } = useStocksContext();
-  const [state, setState] = useState({
-    searchText: '',
-    searchResults: [],
-    originalResults: [], // Add originalResults state
-    showNoResults: false, // Add showNoResults state
-  });
+export default function TestScreen({ route }) {
+  const { ServerURL, watchList } = useStocksContext();
+  const [state, setState] = useState({ stocksData: [] });
+  const [searchTerm, setSearchTerm] = useState('');
 
   useEffect(() => {
-    fetchSymbolNames();
-  }, []);
+    fetchStockData();
+  }, [watchList]);
 
-  const fetchSymbolNames = async () => {
-    try {
-      const data = await fmp.api.quote();
-      // ^ part using fmpAPi
-      setState((prevState) => ({
-        ...prevState,
-        searchResults: data,
-        originalResults: data,
-      }));
-    } catch (error) {
-      console.error('Error fetching symbol names:', error);
-    }
+  const fetchStockData = () => {
+    fmp
+      .search(searchTerm, 10, 'NASDAQ')
+      .then((res) => {
+        console.log(res);
+        setState({ stocksData: res });
+      })
+      .catch((error) => {
+        console.log('Error fetching stock data:', error);
+      });
   };
 
-  const handleSearch = (text) => {
-    setState((prevState) => ({ ...prevState, searchText: text }));
-    if (text === '') {
-      setState((prevState) => ({
-        ...prevState,
-        searchResults: prevState.originalResults, // Restore to initial search results
-      }));
-    } else {
-      filterSearchResults(text);
-    }
-  };
-
-  const filterSearchResults = (text) => {
-    const { originalResults } = state; // Get original search results
-    const filteredResults = originalResults.filter(
+  const filterStocks = (data) => {
+    return data.filter(
       (item) =>
-        item.companyName.toLowerCase().includes(text.toLowerCase()) ||
-        item.symbol.toLowerCase().includes(text.toLowerCase())
+        item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        item.name.toLowerCase().includes(searchTerm.toLowerCase())
     );
-    setState((prevState) => ({
-      ...prevState,
-      searchResults: filteredResults,
-      showNoResults: filteredResults.length === 0, // Update showNoResults state
-    }));
   };
 
-  const handleAddToWatchlist = (symbol) => {
-    addToWatchlist(symbol);
-    console.log(symbol); // for checking passing value
-    // navigation.push('StocksScreen');
-    // ^ have to figure it out(mentioned in ass spec)
-  };
-
-  const renderSearchResult = ({ item }) => (
-    <TouchableOpacity
-      style={styles.resultItem}
-      onPress={() => handleAddToWatchlist(item.symbol)}
-    >
-      <Text style={styles.resultText}>{item.companyName}</Text>
-      <Text style={styles.resultSymbol}>{item.symbol}</Text>
-    </TouchableOpacity>
+  const renderStockItem = ({ item }) => (
+    <View style={styles.stockItem}>
+      <Text style={styles.stockSymbol}>{item.symbol}</Text>
+      <Text style={styles.stockName}>{item.name}</Text>
+      <Text style={styles.stockExchange}>{item.stockExchange}</Text>
+    </View>
   );
 
   return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <Ionicons
-            name='search'
-            size={scaleSize(24)}
-            color='black'
-            style={styles.searchIcon}
-          />
-          <TextInput
-            style={styles.searchInput}
-            placeholder='Search'
-            value={state.searchText}
-            onChangeText={handleSearch}
-          />
-        </View>
-        {state.showNoResults ? (
-          <Text style={styles.noResultsText}>No results found</Text>
-        ) : (
-          <FlatList
-            data={state.searchResults}
-            renderItem={renderSearchResult}
-            keyExtractor={(item) => item.symbol}
-          />
-        )}
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          value={searchTerm}
+          onChangeText={setSearchTerm}
+          placeholder='Search symbol or name'
+          placeholderTextColor='gray'
+        />
+        <TouchableOpacity style={styles.searchButton} onPress={fetchStockData}>
+          <Text style={styles.searchButtonText}>Search</Text>
+        </TouchableOpacity>
       </View>
-    </TouchableWithoutFeedback>
+      <FlatList
+        data={filterStocks(state.stocksData)}
+        keyExtractor={(item) => item.symbol}
+        renderItem={renderStockItem}
+      />
+    </View>
   );
 }
 
@@ -124,35 +81,50 @@ const styles = StyleSheet.create({
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: scaleSize(16),
-    backgroundColor: '#F2F2F2',
-    borderRadius: scaleSize(8),
-    paddingHorizontal: scaleSize(8),
-  },
-  searchIcon: {
-    marginRight: scaleSize(8),
+    marginBottom: 10,
   },
   searchInput: {
     flex: 1,
-    fontSize: scaleSize(16),
+    height: 40,
+    borderWidth: 1,
+    borderColor: 'gray',
+    paddingHorizontal: 10,
+    marginRight: 10,
   },
-  resultItem: {
-    paddingVertical: scaleSize(8),
-    borderBottomWidth: 1,
-    borderBottomColor: '#CCCCCC',
+  searchButton: {
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    alignItems: 'center',
+    borderRadius: 5,
   },
-  resultText: {
-    fontSize: scaleSize(16),
+  searchButtonText: {
+    color: 'white',
     fontWeight: 'bold',
   },
-  resultSymbol: {
-    fontSize: scaleSize(12),
-    color: '#666666',
+  stockItem: {
+    backgroundColor: 'white',
+    padding: 16,
+    marginBottom: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  noResultsText: {
-    textAlign: 'center',
-    fontSize: scaleSize(16),
-    marginTop: scaleSize(16),
-    color: '#666666',
+  stockSymbol: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  stockName: {
+    fontSize: 16,
+  },
+  stockExchange: {
+    fontSize: 14,
+    color: 'gray',
   },
 });
