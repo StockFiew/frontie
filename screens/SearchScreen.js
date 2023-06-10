@@ -29,7 +29,7 @@ export default function SearchScreen({ navigation }) {
 
   const fetchSymbolNames = async () => {
     try {
-      const data = await api.fmpApi();
+      const data = await api.api();
       // ^ part using fmpAPi
       setState((prevState) => ({
         ...prevState,

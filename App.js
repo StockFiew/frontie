@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { Platform, StyleSheet, View, StatusBar } from 'react-native';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-// change from DarkTheme to DefaultTheme
 import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { StocksProvider } from './contexts/StocksContext';
@@ -17,7 +16,6 @@ export default function App(props) {
       <StocksProvider>
         {Platform.OS === 'ios' && <StatusBar barStyle='default' />}
         <NavigationContainer theme={DefaultTheme}>
-          {/* change from DarkTheme to DefaultTheme */}
           <Stack.Navigator initialRouteName='SignIn'>
             <Stack.Screen
               name='SignIn'
@@ -27,12 +25,12 @@ export default function App(props) {
             <Stack.Screen
               name='SignUp'
               component={SignUpScreen}
-              options={{ headerShown: false }} // Hide the header
+              options={{ headerShown: false }}
             />
             <Stack.Screen
               name='Home'
               component={BottomTabNavigator}
-              options={{ headerShown: false }} // Hide the header
+              options={{ headerShown: false }}
             />
           </Stack.Navigator>
         </NavigationContainer>

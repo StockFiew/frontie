@@ -13,7 +13,13 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 
-import testApi from '../services/testApi';
+import fmp from '../services/fmp';
+
+fmp.api
+  .stock('aapl')
+  .quote()
+  .then((response) => console.log(response));
+// reference: https://github.com/patelneel55/financialmodelingprep
 
 export default function TestScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
@@ -29,7 +35,7 @@ export default function TestScreen({ navigation }) {
 
   const fetchSymbolNames = async () => {
     try {
-      const data = await testApi();
+      const data = await fmp.api();
       // ^ part using fmpAPi
       setState((prevState) => ({
         ...prevState,
