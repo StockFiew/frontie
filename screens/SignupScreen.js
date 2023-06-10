@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Button, TextInput, StyleSheet, Text } from 'react-native';
+import { View, Button, TextInput, StyleSheet, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 export default function SignUpScreen() {
@@ -12,6 +12,8 @@ export default function SignUpScreen() {
     try {
       // Place your signup logic here
       console.log('User successfully signed up!');
+      Alert.alert('Welcome!', 'Your sign up has been completed');
+      navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
     } catch (err) {
       console.log('Error signing up:', err);
     }
