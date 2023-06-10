@@ -26,7 +26,7 @@ import { FMP_API_SECRET } from '@env';
 const fmpApi = () => {
   const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=
   1000000000&betaMoreThan=1&volumeMoreThan=
-  10000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
+  100000&exchange=NASDAQ&dividendMoreThan=&apikey=${FMP_API_SECRET}`;
 
   return axios
     .get(url)

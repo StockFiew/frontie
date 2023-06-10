@@ -56,7 +56,7 @@ export const useStocksContext = () => {
   }, []);
 
   return {
-    ServerURL: 'http://131.181.190.87:3001',
+    ServerURL: 'http://localhost:3000',
     watchList: state,
     addToWatchlist,
   };
