@@ -3,9 +3,16 @@
 // https://github.com/motdotla/dotenv
 
 import 'dotenv/config';
-require('dotenv').config();
+import path from 'path';
+
+const dotenvPath = path.resolve(__dirname, '../.env');
+require('dotenv').config({ path: dotenvPath });
+
+// require('dotenv').config();
 
 const FMP_API_SECRET = process.env.FMP_API_SECRET;
+
+console.log(FMP_API_SECRET);
 
 const testApi = () => {
   const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=

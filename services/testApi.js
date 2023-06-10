@@ -1,10 +1,12 @@
-// FAIL to use financialmodelingprep module
+import 'dotenv/config';
+import path from 'path';
 
-import axios from 'axios';
-import { FMP_API_SECRET } from '@env';
-import financialmodelingprep from 'financialmodelingprep';
+const dotenvPath = path.resolve(__dirname, '../.env');
+require('dotenv').config({ path: dotenvPath });
 
-// const testApi = require('financialmodelingprep')(FMP_API_SECRET);
+const FMP_API_SECRET = process.env.FMP_API_SECRET;
+
+console.log(FMP_API_SECRET);
 
 const testApi = () => {
   const url = `https://financialmodelingprep.com/api/v3/stock-screener?marketCapMoreThan=
@@ -19,6 +21,5 @@ const testApi = () => {
       throw err;
     });
 };
-// ^ this works but 'const testApi = require('financialmodelingprep')(FMP_API_SECRET);' not work...
 
 export default testApi;

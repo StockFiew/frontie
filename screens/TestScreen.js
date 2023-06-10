@@ -13,7 +13,7 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
 
-import testApi from '../services/testApi.mjs';
+import testApi from '../services/testApi';
 
 export default function TestScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
