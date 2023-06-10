@@ -11,8 +11,7 @@ import TestScreen from '../screens/TestScreen';
 // ^ TestScreen will be deleted
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Test';
-// change home screen temporarily, will be changed
+const INITIAL_ROUTE_NAME = 'Search';
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
@@ -56,26 +55,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         component={SearchScreen}
         options={{
           title: 'Search',
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-search' />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name='Sign In'
-        component={SignInScreen}
-        options={{
-          title: 'Sign In',
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-search' />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name='Sign Up'
-        component={SignUpScreen}
-        options={{
-          title: 'Sign Up',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
           ),

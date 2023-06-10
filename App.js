@@ -6,7 +6,8 @@ import { createStackNavigator } from '@react-navigation/stack';
 import BottomTabNavigator from './navigation/BottomTabNavigator';
 import { StocksProvider } from './contexts/StocksContext';
 import 'react-native-gesture-handler';
-import StocksScreen from './screens/StocksScreen';
+import SignInScreen from './screens/SignInScreen';
+import SignUpScreen from './screens/SignUpScreen';
 
 const Stack = createStackNavigator();
 
@@ -17,16 +18,21 @@ export default function App(props) {
         {Platform.OS === 'ios' && <StatusBar barStyle='default' />}
         <NavigationContainer theme={DefaultTheme}>
           {/* change from DarkTheme to DefaultTheme */}
-          <Stack.Navigator>
+          <Stack.Navigator initialRouteName='SignIn'>
+            <Stack.Screen
+              name='SignIn'
+              component={SignInScreen}
+              options={{ headerShown: false }} // Hide the header
+            />
+            <Stack.Screen
+              name='SignUp'
+              component={SignUpScreen}
+              options={{ headerShown: false }} // Hide the header
+            />
             <Stack.Screen
               name='Home'
               component={BottomTabNavigator}
               options={{ headerShown: false }} // Hide the header
-            />
-            <Stack.Screen
-              name='Stocks'
-              component={StocksScreen}
-              options={{ headerShown: true, title: 'Stocks' }}
             />
           </Stack.Navigator>
         </NavigationContainer>
