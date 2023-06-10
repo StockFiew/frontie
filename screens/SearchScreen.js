@@ -12,7 +12,8 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../services/fmp.js';
+import fmp from '../services/fmp';
+import alpha from '../services/alpha';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();
@@ -29,7 +30,7 @@ export default function SearchScreen({ navigation }) {
 
   const fetchSymbolNames = async () => {
     try {
-      const data = await api.api();
+      const data = await fmp.api.quote();
       // ^ part using fmpAPi
       setState((prevState) => ({
         ...prevState,

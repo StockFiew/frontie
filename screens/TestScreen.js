@@ -4,6 +4,7 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
+import { FMP_API_SECRET } from '@env';
 
 export default function TestScreen({ route }) {
   const { ServerURL, watchList } = useStocksContext();
@@ -15,7 +16,7 @@ export default function TestScreen({ route }) {
 
   const fetchStockData = () => {
     fmp.api
-      .stock('GOOG')
+      .stock('AAPL')
       .quote()
       .then((data) => {
         console.log(data); // Add this line to see the actual response data
@@ -30,7 +31,15 @@ export default function TestScreen({ route }) {
           },
         ];
         setState({ stocksData: stockData });
-      })
+      });
+    fmp.api
+      // search(keywords, limit = 10, exchange)      // /search?{opts}
+      // ^ document example (https://github.com/patelneel55/financialmodelingprep#search)
+      .search('GO', 10, 'NASDAQ')
+      // .search('GO', (limit = 10), 'NASDAQ') // this dosen't work either
+      // https://financialmodelingprep.com/api/v3/search?query=GO&limit=10&exchange=NASDAQ&apikey=6b5e8bedc6de039791e6bbd72013e79d
+      // ^ I can see this page but why...
+      .then((res) => console.log(res))
       .catch((error) => {
         console.log('Error fetching stock data:', error);
       });
