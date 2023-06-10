@@ -12,7 +12,7 @@ import {
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import { Ionicons } from '@expo/vector-icons';
-import api from '../services/fmpApi.js';
+import api from '../services/fmp.js';
 
 export default function SearchScreen({ navigation }) {
   const { addToWatchlist } = useStocksContext();

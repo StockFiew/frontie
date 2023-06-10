@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
+import fmp from "../services/fmp";
+import alpha from "../services/alpha";
 
 export default function StocksScreen({ route }) {
   const { ServerURL, watchList } = useStocksContext();
@@ -11,15 +13,14 @@ export default function StocksScreen({ route }) {
     fetchStockData();
   }, [watchList]);
 
-  const fetchStockData = async () => {
-    try {
-      // const response = await fetch(`${ServerURL}/stocks`);
-      const response = await fetch(`${ServerURL}`);
-      const data = await response.json();
-      setState({ stocksData: data.stocks });
-    } catch (error) {
-      console.log('Error fetching stock data:', error);
-    }
+  const fetchStockData = () => {
+    alpha.api.data.intraday('msft').then((data) => JSON.stringify(data))
+      .then((data) => {
+        console.log(data)
+        });
+    fmp.api.stock('GOOG').quote()
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err))
   };
 
   return (
