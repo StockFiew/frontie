@@ -19,7 +19,7 @@ export default function SearchScreen({ navigation }) {
   const [state, setState] = useState({
     searchText: '',
     searchResults: [],
-    originalResults: [],
+    originalResults: [], // Add originalResults state
     showNoResults: false, // Add showNoResults state
   });
 
@@ -69,7 +69,7 @@ export default function SearchScreen({ navigation }) {
 
   const handleAddToWatchlist = (symbol) => {
     addToWatchlist(symbol);
-    console.log(symbol);
+    console.log(symbol); // for checking passing value
     // navigation.push('StocksScreen');
     // ^ have to figure it out(mentioned in ass spec)
   };
