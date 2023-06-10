@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+// import userApi from '../services/userApi.mjs';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -11,7 +12,8 @@ export default function SignUpScreen() {
   const onSignUp = async () => {
     try {
       // Place your signup logic here
-      console.log('User successfully signed up!');
+      const user = await registerUser(email, password);
+      console.log('Registered user:', user);
       Alert.alert('Welcome!', 'Your sign up has been completed');
       navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
     } catch (err) {
@@ -38,24 +40,6 @@ export default function SignUpScreen() {
     }
   };
 
-  const signUp = async () => {
-    try {
-      // Place your signup logic here
-      console.log('User successfully signed up!');
-    } catch (err) {
-      console.log('Error signing up:', err);
-    }
-  };
-
-  const signIn = async () => {
-    try {
-      // Place your signup logic here
-      console.log('User successfully signed up!');
-    } catch (err) {
-      console.log('Error signing up:', err);
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
@@ -79,8 +63,8 @@ export default function SignUpScreen() {
       />
 
       <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
-      <Text style={styles.text}>If you are a member</Text>
-      <Button title='Sign in here' onPress={onSignIn} color='#000000' />
+      <Text style={styles.text2}>If you are a member</Text>
+      <Button title='Sign in here' onPress={onSignIn} color='#525050' />
     </View>
   );
 }
@@ -119,41 +103,15 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   text: {
-    color: '#000000', // Specify the color here
-    fontSize: 12,
+    color: '#000000',
+    fontSize: 14,
+    marginTop: 10,
+    // marginBottom:,
+  },
+  text2: {
+    color: '#525050',
+    fontSize: 13,
+    marginTop: 10,
+    marginBottom: -7,
   },
 });
-
-/*
-    Example
-    const RegisterScreen = () => {
-        const [email, setEmail] = useState('');
-        const [password, setPassword] = useState('');
-
-        const handleRegister = async () => {
-            try {
-                const user = await registerUser(email, password);
-                console.log('Registered user:', user);
-            } catch (error) {
-                console.error(error);
-            }
-        };
-
-        return (
-            <View>
-                <TextInput
-                    placeholder="Email"
-                    value={email}
-                    onChangeText={setEmail}
-                />
-                <TextInput
-                    placeholder="Password"
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                />
-                <Button title="Register" onPress={handleRegister} />
-            </View>
-        );
-    };
-    */
