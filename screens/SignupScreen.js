@@ -47,7 +47,6 @@ export default function SignUpScreen() {
     <View style={styles.container}>
       <Text style={styles.title}>Sign up</Text>
       <Text style={styles.text}>Type your email address</Text>
-
       <TextInput
         style={styles.input}
         placeholder='Email'
@@ -64,15 +63,16 @@ export default function SignUpScreen() {
         placeholderTextColor='#F2F2F2'
         onChangeText={(val) => onChangeText('password', val)}
       />
-      <Text style={styles.text2}>
+      <Text style={styles.secondText}>
         - At least one capital letter and number{'\n'}- Between 8 and 15
         characters.{'\n'}
+        {'\n'}
       </Text>
       <View style={{ marginVertical: 5 }}>
         <Button title='Sign up' onPress={onSignUp} color='#8A2BE2' />
       </View>
 
-      <Text style={styles.text2}>If you are a member</Text>
+      <Text style={styles.secondText}>If you are a member</Text>
       <View style={{ marginVertical: 13 }}>
         <Button title='Sign in here' onPress={onSignIn} color='#525050' />
       </View>
@@ -87,15 +87,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
   },
-  container2: {
-    flex: 0.5,
-    width: 310,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#292828',
-    borderRadius: 20,
-  },
-
   title: {
     fontSize: 24,
     fontWeight: 'bold',
@@ -114,11 +105,13 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   text: {
+    textAlign: 'left', // Left align the text
     color: '#000000',
     fontSize: 14,
     marginTop: 10,
+    // marginBottom: ,
   },
-  text2: {
+  secondText: {
     textAlign: 'center',
     color: '#525050',
     width: 260,

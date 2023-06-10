@@ -29,7 +29,7 @@ export default function SignInScreen() {
   return (
     <View style={styles.container}>
       <Image source={logo} style={styles.logo} />
-      <View style={styles.container2}>
+      <View style={styles.secondContainer}>
         <Text style={styles.title}>Sign in</Text>
         <TextInput
           value={username}
@@ -66,8 +66,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#F2F2F2',
   },
-  container2: {
-    flex: 0.55,
+  secondContainer: {
+    flex: 0.7,
     width: 310,
     justifyContent: 'center',
     alignItems: 'center',
@@ -75,8 +75,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   logo: {
-    width: 100,
-    height: 100,
+    width: 70,
+    height: 70,
     marginBottom: 20,
   },
   title: {
