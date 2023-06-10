@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+// API_URL=https://172.26.22.24:3000/
+
 const StocksContext = React.createContext();
 
 export const StocksProvider = ({ children }) => {
