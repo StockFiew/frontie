@@ -17,27 +17,36 @@ export default function TestScreen({ route }) {
     fmp.api
       .stock('GOOG')
       .quote()
+      .then((data) => JSON.stringify(data))
       .then((data) => {
-        console.log(data); // Add this line to see the actual response data
-        const stockData = [
-          {
-            timestamp: data[0].timestamp,
-            '1. open': data[0].open,
-            '2. high': data[0].dayHigh,
-            '3. low': data[0].dayLow,
-            '4. close': data[0].previousClose,
-            '5. volume': data[0].volume,
-          },
-        ];
-        setState({ stocksData: stockData });
-      })
-      .catch((error) => {
-        console.log('Error fetching stock data:', error);
+        console.log(data).catch((err) => console.log(err));
       });
   };
 
+  useEffect(() => {
+    const stockData = Object.entries(jsonData['Time Series (1min)']).map(
+      ([timestamp, values]) => ({
+        timestamp,
+        ...values,
+      })
+    );
+    setState({ stocksData: stockData });
+  }, [jsonData]);
+
   return (
     <View style={styles.container}>
+      {/* <FlatList
+        data={state.stocksData}
+        keyExtractor={(item) => item.symbol}
+        renderItem={({ item }) => (
+          <View style={styles.stockItem}>
+            <Text>{item.symbol}</Text>
+            <Text>{item.companyName}</Text>
+            Display other stock information
+          </View>
+        )}
+      /> */}
+
       <FlatList
         data={state.stocksData}
         keyExtractor={(item) => item.timestamp}
@@ -60,5 +69,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: scaleSize(16),
+  },
+  stockItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: scaleSize(8),
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
   },
 });
