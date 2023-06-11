@@ -7,24 +7,19 @@ const api = fmpapi(FMP_API_SECRET);
 
 const search = (symbols, limit, exchange) => {
   const url = `https://financialmodelingprep.com/api/v3/search?query=${symbols}&limit=${limit}&exchange=${exchange}&apikey=${FMP_API_SECRET}`;
-  console.log(url)
+  console.log(url);
 
-  return axios.get(url)
+  return fetch(url)
     .then((res) => res.json())
     .catch((err) => {
-      console.error(err);
-      throw err;
     });
 };
 
 const news = (symbols) => {
-  const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(
-    ','
-  )}&page=0&apikey=${FMP_API_SECRET}`;
+  const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols.join(',')}&page=0&apikey=${FMP_API_SECRET}`;
 
-  return axios
-    .get(url)
-    .then((res) => res.data)
+  return fetch(url)
+    .then((res) => res.json())
     .catch((err) => {
       console.error(err);
       throw err;

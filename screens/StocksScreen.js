@@ -22,9 +22,6 @@ export default function StocksScreen({ route }) {
   }, []);
   const fetchStockData = async () => {
     try {
-      console.log("fetching watchlist");
-      setWatchList(watchlist.getList());
-      console.log("watch list fetched");
       // Fetch stock data for each symbol
       if (watchList.length !== 0) {
         const stocksList = watchList.map((item) => api.stock(item).quote());

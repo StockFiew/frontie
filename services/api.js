@@ -21,11 +21,11 @@ const sendAuthenticatedRequest = (url, method = 'GET', body = null) => {
     })
     .then(response => response.json())
     .then(data => {
-      console.log(data);
       if (data.token !== undefined) {
         SecureStore.setItemAsync('token', data.token)
       }
       if (!data.Error) {
+
         return data;
       } else {
         throw new Error(data.Message);

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import StocksScreen from '../screens/StocksScreen';
-import SearchScreen from '../screens/SearchScreen';
+import WatchListScreen from '../screens/WatchListScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import UserScreen from "../screens/UserScreen";
 
@@ -37,11 +37,11 @@ export default function BottomTabNavigator({ navigation, route }) {
       />
       <BottomTab.Screen
         name='Search'
-        component={SearchScreen}
+        component={WatchListScreen}
         options={{
-          title: 'Search',
+          title: 'Watch List',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-search' />
+            <TabBarIcon focused={focused} name='md-eye' />
           ),
         }}
       />
@@ -51,7 +51,7 @@ export default function BottomTabNavigator({ navigation, route }) {
         options={{
           title: 'User',
           tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-trending-up' />
+            <TabBarIcon focused={focused} name='md-body' />
           ),
         }}
       />
