@@ -49,7 +49,7 @@ export default function SearchScreen({ route }) {
 
     setIsSearching(true);
     if (keywords.length > 0) {
-      fmp
+      fmp.api
         .search(keywords, 10000, 'NASDAQ')
         .then((res) => {
           setStocksData(res);
