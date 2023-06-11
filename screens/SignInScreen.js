@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/images/icon_trans.png'; // Relative path to the image
+import { scaleSize } from '../constants/Layout';
 
 export default function SignInScreen() {
   const [username, setUsername] = useState('');
@@ -18,7 +19,8 @@ export default function SignInScreen() {
   const navigation = useNavigation();
 
   const onSignIn = () => {
-    Alert.alert('Credentials', `${username} + ${password}`);
+    Alert.alert(`Hi, ${username}!`, 'Good to see you again');
+    console.log(`${username} + ${password}`);
     navigation.navigate('Home'); // Navigate to the 'Home' screen
   };
 
@@ -68,38 +70,38 @@ const styles = StyleSheet.create({
   },
   secondContainer: {
     flex: 0.7,
-    width: 310,
+    width: scaleSize(310),
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#e6e6ee',
-    borderRadius: 20,
+    borderRadius: scaleSize(20),
   },
   logo: {
-    width: 70,
-    height: 70,
-    marginBottom: 20,
+    width: scaleSize(70),
+    height: scaleSize(70),
+    marginBottom: scaleSize(20),
   },
   title: {
-    fontSize: 24,
+    fontSize: scaleSize(24),
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: scaleSize(20),
     color: '#000000',
   },
   input: {
-    width: 260,
-    height: 55,
+    width: scaleSize(260),
+    height: scaleSize(55),
     backgroundColor: '#8A2BE2',
-    margin: 10,
-    padding: 15,
+    margin: scaleSize(10),
+    padding: scaleSize(15),
     color: 'white',
-    borderRadius: 14,
-    fontSize: 15,
+    borderRadius: scaleSize(14),
+    fontSize: scaleSize(15),
     fontWeight: '500',
   },
   text: {
     color: '#525050',
-    fontSize: 14,
-    marginTop: 10,
-    marginBottom: -7,
+    fontSize: scaleSize(14),
+    marginTop: scaleSize(10),
+    marginBottom: scaleSize(-7),
   },
 });

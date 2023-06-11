@@ -20,21 +20,6 @@ export default function StocksScreen({ route }) {
     fetchStockData();
   }, [watchList]);
 
-  // const fetchStockData = async () => {
-  //   // Extract symbols from the watchlist
-  //   const symbols = watchList.map((item) => item.symbol);
-  //   try {
-  //     // Fetch stock data for each symbol
-  //     const responses = await Promise.all(
-  //       symbols.map((symbol) => fmp.api.stock(symbol).quote())
-  //     );
-  //     const stocksData = responses.map((response) => response[0]);
-  //     setState({ stocksData });
-  //   } catch (error) {
-  //     console.error('Error fetching stock data:', error);
-  //   }
-  // };
-
   const fetchStockData = async () => {
     const symbols = watchList
       .filter((item) => item && item.symbol)
@@ -44,6 +29,7 @@ export default function StocksScreen({ route }) {
       // Fetch stock data for each symbol
       const responses = await Promise.all(
         symbols.map((symbol) => fmp.api.stock(symbol).quote())
+        // symbols.map((symbol) => alpha.api.data.quote(symbol))
       );
       const stocksData = responses.map((response) => response[0]);
       setState({ stocksData });
@@ -84,13 +70,17 @@ export default function StocksScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={state.stocksData}
-        keyExtractor={(item) => item.symbol}
-        renderItem={renderStockItem}
-        contentContainerStyle={styles.flatListContent}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      {state.stocksData.length > 0 ? (
+        <FlatList
+          data={state.stocksData}
+          keyExtractor={(item) => item.symbol}
+          renderItem={renderStockItem}
+          contentContainerStyle={styles.flatListContent}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      ) : (
+        <Text style={styles.noWatchlistText}>No stocks in watchlist</Text>
+      )}
     </View>
   );
 }
@@ -103,27 +93,26 @@ const styles = StyleSheet.create({
     padding: scaleSize(16),
   },
   flatListContent: {
-    // height: 100,
     paddingBottom: scaleSize(16),
   },
   stockItem: {
-    height: 65,
+    height: scaleSize(65),
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingVertical: scaleSize(8),
     backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
+    borderRadius: scaleSize(8),
+    borderWidth: scaleSize(1),
     borderColor: '#ddd',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2,
+      height: scaleSize(2),
     },
     shadowOpacity: 0.1,
-    shadowRadius: 2,
-    elevation: 2,
+    shadowRadius: scaleSize(2),
+    elevation: scaleSize(2),
     marginVertical: scaleSize(4),
   },
   stockSymbol: {
@@ -135,10 +124,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#fc3535',
     height: scaleSize(35),
     width: scaleSize(60),
-    padding: 7,
-    borderRadius: 4,
-    marginLeft: 8,
-    marginRight: 15,
+    padding: scaleSize(7),
+    borderRadius: scaleSize(4),
+    marginLeft: scaleSize(8),
+    marginRight: scaleSize(15),
     justifyContent: 'center',
     alignItems: 'center',
   },
@@ -149,8 +138,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   separator: {
-    height: 1,
+    height: scaleSize(1),
     backgroundColor: '#ccc',
     marginVertical: scaleSize(8),
+  },
+  noWatchlistText: {
+    fontSize: scaleSize(15),
+    textAlign: 'center',
+    marginTop: scaleSize(20),
   },
 });

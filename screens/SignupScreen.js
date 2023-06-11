@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-// import userApi from '../services/userApi.mjs';
+import userApi from '../services/userApi.js';
+import { scaleSize } from '../constants/Layout';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
@@ -17,7 +18,7 @@ export default function SignUpScreen() {
       console.log('Registered user:', user);
       console.log('User successfully signed up!');
       // ^ for the test
-      Alert.alert('Welcome!', 'Your sign up has been completed');
+      Alert.alert('Welcome to StockFiew!', 'Your sign up has been completed');
       navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
     } catch (err) {
       console.log('Error signing up:', err);
@@ -88,34 +89,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#F2F2F2',
   },
   title: {
-    fontSize: 24,
+    fontSize: scaleSize(24),
     fontWeight: 'bold',
-    marginBottom: 20,
+    marginBottom: scaleSize(20),
     color: '#000000',
   },
   input: {
-    width: 260,
-    height: 55,
+    width: scaleSize(260),
+    height: scaleSize(55),
     backgroundColor: '#8A2BE2',
-    margin: 10,
-    padding: 15,
+    margin: scaleSize(10),
+    padding: scaleSize(15),
     color: 'white',
-    borderRadius: 14,
-    fontSize: 15,
+    borderRadius: scaleSize(14),
+    fontSize: scaleSize(15),
     fontWeight: '500',
   },
   text: {
     textAlign: 'left', // Left align the text
     color: '#000000',
-    fontSize: 14,
-    marginTop: 10,
+    fontSize: scaleSize(14),
+    marginTop: scaleSize(10),
     // marginBottom: ,
   },
   secondText: {
     textAlign: 'center',
     color: '#525050',
-    width: 260,
-    fontSize: 14,
-    marginBottom: -7,
+    width: scaleSize(260),
+    fontSize: scaleSize(14),
+    marginBottom: scaleSize(-7),
   },
 });
