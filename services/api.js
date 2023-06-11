@@ -25,7 +25,7 @@ const sendAuthenticatedRequest = (url, method = 'GET', body = null) => {
       if (data.token !== undefined) {
         SecureStore.setItemAsync('token', data.token)
       }
-      if (data.Error === "False") {
+      if (!data.Error) {
         return data;
       } else {
         throw new Error(data.Message);
