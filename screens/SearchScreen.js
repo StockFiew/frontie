@@ -72,18 +72,10 @@ export default function SearchScreen({ route }) {
   };
 
   // Add to watchlist and navigete to StocksScreen
-
-  // const addToWatchlistAndNavigate = (item) => {
-  //   addToWatchlist(item);
-  //   // clearWatchlist(); // for the test, it will be deleted
-  //   navigation.navigate('Stocks');
-  // };
-
   const addToWatchlistAndNavigate = (item) => {
     const isAlreadyAdded = watchList.some(
       (stock) => stock.symbol === item.symbol
     );
-
     if (isAlreadyAdded) {
       Alert.alert('Already Added', 'This stock is already in your watchlist.');
     } else {
@@ -92,33 +84,9 @@ export default function SearchScreen({ route }) {
     }
   };
 
-  // const renderStockItem = ({ item }) => {
-  //   const isAlreadyAdded = watchList.some(
-  //     (stock) => stock.symbol === item.symbol
-  //   );
-  //   if (isAlreadyAdded) {
-  //     Alert.alert('Already Added', 'This stock is already in your watchlist.');
-  //   } else {
-  //     addToWatchlist(item);
-  //     navigation.navigate('Stocks');
-  //   }
-  //   const handleAddToWatchlist = () => {
-  //     if (!isAlreadyAdded) {
-  //       addToWatchlistAndNavigate(item);
-  //     }
-  //   };
-
-  //   return (
-  //     <TouchableOpacity style={styles.stockItem} onPress={handleAddToWatchlist}>
-  //       <Text style={styles.stockSymbol}>{item.symbol}</Text>
-  //       <Text style={styles.stockName}>{item.name}</Text>
-  //       <Text style={styles.stockExchange}>{item.stockExchange}</Text>
-  //     </TouchableOpacity>
-  //   );
-  // };
-
   const renderStockItem = ({ item }) => {
     const handleAddToWatchlist = () => {
+      // clearWatchlist(); // delete all watchlist, for the test, it will be deleted
       addToWatchlistAndNavigate(item);
     };
 
