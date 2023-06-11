@@ -3,6 +3,7 @@ import { ALPHA_VENTAGE_API_KEY } from '@env';
 import vantage from 'alphavantage';
 
 const api = vantage({ key: ALPHA_VENTAGE_API_KEY });
+// https://github.com/zackurben/alphavantage/blob/master/README.md
 
 //const alphaApi = (symbols) => {
 //  const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${symbols}&apikey=${ALPHA_VENTAGE_API_KEY}`;
@@ -17,7 +18,7 @@ const api = vantage({ key: ALPHA_VENTAGE_API_KEY });
 //};
 
 const alpha = {
-  api
-}
+  api,
+};
 
 export default alpha;
