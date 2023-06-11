@@ -12,13 +12,10 @@ import {
 } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
-import fmp from '../services/fmp';
 import alpha from '../services/alpha';
-import { FMP_API_SECRET } from '@env';
 import { useNavigation } from '@react-navigation/native';
 
 export default function SearchScreen({ route }) {
-  // const { ServerURL, watchList, addToWatchlist } = useStocksContext();
   const { ServerURL, watchList, addToWatchlist, clearWatchlist } =
     useStocksContext(); // temp
   const [stocksData, setStocksData] = useState([]);
@@ -34,12 +31,12 @@ export default function SearchScreen({ route }) {
   const fetchStockData = () => {
     setIsSearching(true);
     if (keywords.length > 0) {
-      fmp
-        .search(keywords, 10000, 'NASDAQ')
+      alpha.api.data
+        .search(keywords)
         .then((res) => {
-          setStocksData(res);
+          setStocksData(res.bestMatches);
           setIsSearching(false);
-          setShowNoResults(res.length === 0);
+          setShowNoResults(res.bestMatches.length === 0);
         })
         .catch((error) => {
           console.log('Error fetching stock data:', error);
@@ -56,8 +53,8 @@ export default function SearchScreen({ route }) {
   const filterStocks = (data) => {
     return data.filter(
       (item) =>
-        item.symbol.toLowerCase().includes(keywords.toLowerCase()) ||
-        item.name.toLowerCase().includes(keywords.toLowerCase())
+        item['1. symbol'].toLowerCase().includes(keywords.toLowerCase()) ||
+        item['2. name'].toLowerCase().includes(keywords.toLowerCase())
     );
   };
 
@@ -74,7 +71,7 @@ export default function SearchScreen({ route }) {
   // Add to watchlist and navigete to StocksScreen
   const addToWatchlistAndNavigate = (item) => {
     const isAlreadyAdded = watchList.some(
-      (stock) => stock.symbol === item.symbol
+      (stock) => stock.symbol === item['1. symbol']
     );
     if (isAlreadyAdded) {
       Alert.alert('Already Added', 'This stock is already in your watchlist.');
@@ -86,15 +83,15 @@ export default function SearchScreen({ route }) {
 
   const renderStockItem = ({ item }) => {
     const handleAddToWatchlist = () => {
-      // clearWatchlist(); // delete all watchlist, for the test, it will be deleted
       addToWatchlistAndNavigate(item);
+      // clearWatchlist(); will be deletete later !
     };
 
     return (
       <TouchableOpacity style={styles.stockItem} onPress={handleAddToWatchlist}>
-        <Text style={styles.stockSymbol}>{item.symbol}</Text>
-        <Text style={styles.stockName}>{item.name}</Text>
-        <Text style={styles.stockExchange}>{item.stockExchange}</Text>
+        <Text style={styles.stockSymbol}>{item['1. symbol']}</Text>
+        <Text style={styles.stockName}>{item['2. name']}</Text>
+        <Text style={styles.stockExchange}>{item['4. region']}</Text>
       </TouchableOpacity>
     );
   };
@@ -119,7 +116,7 @@ export default function SearchScreen({ route }) {
       ) : (
         <FlatList
           data={filterStocks(stocksData)}
-          keyExtractor={(item) => item.symbol}
+          keyExtractor={(item) => item['1. symbol']}
           renderItem={renderStockItem}
           ListEmptyComponent={
             showNoResults && (

@@ -12,7 +12,7 @@ import { scaleSize } from '../constants/Layout';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
 
-export default function StocksScreen({ route }) {
+export default function StockScreen() {
   const { ServerURL, watchList, removeFromWatchlist } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
 
@@ -20,21 +20,22 @@ export default function StocksScreen({ route }) {
     fetchStockData();
   }, [watchList]);
 
+  // const fetchStockData = async () => {
+  //   const symbols = watchList.map((item) => item.symbol);
+
+  //   try {
+  //     // Fetch stock data for each symbol
+  //     const responses = await Promise.all(
+  //       symbols.map((symbol) => fmp.api.stock(symbol).quote())
+  //     );
+  //     const stocksData = responses.map((response) => response[0]);
+  //     setState({ stocksData });
+  //   } catch (error) {
+  //     console.error('Error fetching stock data:', error);
+  //   }
+  // };
+
   const fetchStockData = async () => {
-    // alpha.api.data
-    //   .search('AAPL')
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err));
-
-    // alpha.api.data.intraday('msft').then((data) => JSON.stringify(data))
-    //   .then((data) => {
-    //     console.log(data)
-    //     });
-    // fmp.api.stock('GOOG').quote()
-    //   .then((res) => console.log(res))
-    //   .catch((err) => console.log(err))
-
-    // Extract symbols from the watchlist
     const symbols = watchList.map((item) => item.symbol);
 
     try {
@@ -42,31 +43,14 @@ export default function StocksScreen({ route }) {
       const responses = await Promise.all(
         symbols.map((symbol) => fmp.api.stock(symbol).quote())
       );
-      const stocksData = responses.map((response) => response[0]);
+
+      const stocksData = responses.map((response) => response && response[0]); // Check if response is defined
+
       setState({ stocksData });
     } catch (error) {
       console.error('Error fetching stock data:', error);
     }
   };
-
-  // const handleDelete = (item) => {
-  //   Alert.alert(
-  //     'Delete Stock',
-  //     'Are you sure you want to remove this stock from your watchlist?',
-  //     [
-  //       {
-  //         text: 'Cancel',
-  //         style: 'cancel',
-  //       },
-  //       {
-  //         text: 'Delete',
-  //         style: 'destructive',
-  //         onPress: () => removeFromWatchlist(item.symbol),
-  //       },
-  //     ],
-  //     { cancelable: true }
-  //   );
-  // };
 
   const renderStockItem = ({ item }) => {
     const handleDelete = () => {
@@ -87,10 +71,11 @@ export default function StocksScreen({ route }) {
         { cancelable: true }
       );
     };
-
     return (
       <View style={styles.stockItem}>
-        <Text style={styles.stockSymbol}>{item.symbol}</Text>
+        <Text style={styles.stockSymbol}>{item['1. symbol']}</Text>
+        <Text style={styles.stockName}>{item['2. name']}</Text>
+
         <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
           <Text style={styles.deleteButtonText}>Delete</Text>
         </TouchableOpacity>
@@ -100,19 +85,54 @@ export default function StocksScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={state.stocksData}
-        keyExtractor={(item) => item.symbol}
-        renderItem={renderStockItem}
-        contentContainerStyle={styles.flatListContent}
-        ItemSeparatorComponent={() => <View style={styles.separator} />}
-      />
+      {watchList.length > 0 ? (
+        <FlatList
+          data={state.stocksData}
+          keyExtractor={(item) => item['1. symbol']}
+          renderItem={renderStockItem}
+          contentContainerStyle={styles.flatListContent}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
+      ) : (
+        <Text style={styles.noWatchlistText}>No stocks in watchlist</Text>
+      )}
     </View>
   );
 }
 
-// https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo
-// for chart
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     padding: 16,
+//   },
+//   stockItem: {
+//     backgroundColor: 'white',
+//     padding: 16,
+//     marginBottom: 10,
+//     borderRadius: 8,
+//     shadowColor: '#000',
+//     shadowOffset: {
+//       width: 0,
+//       height: 2,
+//     },
+//     shadowOpacity: 0.2,
+//     shadowRadius: 4,
+//     elevation: 3,
+//   },
+//   stockSymbol: {
+//     fontSize: 18,
+//     fontWeight: 'bold',
+//   },
+//   stockName: {
+//     fontSize: 16,
+//   },
+//   noWatchlistText: {
+//     fontSize: 16,
+//     textAlign: 'center',
+//     marginTop: 20,
+//   },
+// });
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
