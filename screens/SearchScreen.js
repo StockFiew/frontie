@@ -33,21 +33,23 @@ export default function SearchScreen({ route }) {
   }, [watchList]);
 
   const fetchSearchData = () => {
-    fmp.api
+    fmp
       .search('GOOG')
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
   };
+  // ^ test code
 
   const fetchStockData = () => {
-    fmp.api
-      .stock('GOOG')
-      .quote()
-      .then((res) => console.log(res));
+    // fmp.api
+    //   .stock('GOOG')
+    //   .quote()
+    //   .then((res) => console.log(res));
+    // ^ test code
 
     setIsSearching(true);
     if (keywords.length > 0) {
-      fmp.api
+      fmp
         .search(keywords, 10000, 'NASDAQ')
         .then((res) => {
           setStocksData(res);
