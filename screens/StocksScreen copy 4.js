@@ -23,6 +23,12 @@ export default function StocksScreen({ route }) {
   const fetchStockData = async () => {
     // Extract symbols from the watchlist
     const symbols = watchList.map((item) => item.symbol);
+    // alpha.api.data
+    //   .intraday('msft')
+    //   .then((data) => JSON.stringify(data))
+    //   .then((data) => {
+    //     console.log(data);
+    //   });
 
     try {
       // Fetch stock data for each symbol
@@ -57,12 +63,12 @@ export default function StocksScreen({ route }) {
 
   const renderStockItem = ({ item }) => {
     return (
-      <View style={styles.stockItem}>
+      <TouchableOpacity
+        style={styles.stockItem}
+        onPress={() => handleDelete(item)}
+      >
         <Text style={styles.stockSymbol}>{item.symbol}</Text>
-        <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
-          <Text style={styles.deleteButtonText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
+      </TouchableOpacity>
     );
   };
 
@@ -85,15 +91,12 @@ const styles = StyleSheet.create({
     padding: scaleSize(16),
   },
   flatListContent: {
-    // height: 100,
     paddingBottom: scaleSize(16),
   },
   stockItem: {
-    height: 65,
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: scaleSize(8),
+    paddingVertical: scaleSize(15),
     backgroundColor: '#fff',
     borderRadius: 8,
     borderWidth: 1,
@@ -109,26 +112,9 @@ const styles = StyleSheet.create({
     marginVertical: scaleSize(4),
   },
   stockSymbol: {
-    fontSize: scaleSize(16),
+    fontSize: 16,
     fontWeight: 'bold',
     marginLeft: scaleSize(20),
-  },
-  deleteButton: {
-    backgroundColor: '#fc3535',
-    height: scaleSize(35),
-    width: scaleSize(60),
-    padding: 7,
-    borderRadius: 4,
-    marginLeft: 8,
-    marginRight: 15,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  deleteButtonText: {
-    color: '#fff',
-    fontSize: scaleSize(13),
-    fontWeight: 'bold',
   },
   separator: {
     height: 1,

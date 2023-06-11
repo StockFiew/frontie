@@ -7,9 +7,6 @@ import SignInScreen from '../screens/SignInScreen';
 import SignUpScreen from '../screens/SignUpScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
-import TestScreen from '../screens/TestScreen';
-// ^ TestScreen will be deleted
-
 const BottomTab = createBottomTabNavigator();
 const INITIAL_ROUTE_NAME = 'Stocks';
 
@@ -29,17 +26,6 @@ export default function BottomTabNavigator({ navigation, route }) {
         },
       }}
     >
-      <BottomTab.Screen
-        name='Test'
-        component={TestScreen}
-        options={{
-          title: 'Test',
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-trending-up' />
-          ),
-        }}
-      />
-      {/* ^ TestScreen will be deleted */}
       <BottomTab.Screen
         name='Stocks'
         component={StocksScreen}
