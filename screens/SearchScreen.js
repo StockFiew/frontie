@@ -14,13 +14,17 @@ import { scaleSize } from '../constants/Layout';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
 import { FMP_API_SECRET } from '@env';
+import { useNavigation } from '@react-navigation/native';
 
 export default function SearchScreen({ route }) {
-  const { ServerURL, watchList } = useStocksContext();
+  // const { ServerURL, watchList, addToWatchlist } = useStocksContext();
+  const { ServerURL, watchList, addToWatchlist, clearWatchlist } =
+    useStocksContext(); // temp
   const [stocksData, setStocksData] = useState([]);
   const [keywords, setKeywords] = useState('');
   const [isSearching, setIsSearching] = useState(false);
   const [showNoResults, setShowNoResults] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     fetchStockData();
@@ -66,12 +70,24 @@ export default function SearchScreen({ route }) {
     setShowNoResults(false);
   };
 
+  // NEW
+  const addToWatchlistAndNavigate = (item) => {
+    addToWatchlist(item);
+    navigation.navigate('Stocks');
+  };
+
   const renderStockItem = ({ item }) => (
-    <View style={styles.stockItem}>
+    <TouchableOpacity
+      style={styles.stockItem}
+      onPress={() => {
+        addToWatchlist(item);
+        addToWatchlistAndNavigate(item);
+      }}
+    >
       <Text style={styles.stockSymbol}>{item.symbol}</Text>
       <Text style={styles.stockName}>{item.name}</Text>
       <Text style={styles.stockExchange}>{item.stockExchange}</Text>
-    </View>
+    </TouchableOpacity>
   );
 
   return (

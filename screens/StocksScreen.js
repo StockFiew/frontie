@@ -14,17 +14,18 @@ export default function StocksScreen({ route }) {
   }, [watchList]);
 
   const fetchStockData = () => {
-    //   alpha.api.data
-    //     .intraday('msft')
-    //     .then((data) => JSON.stringify(data))
-    //     .then((data) => {
-    //       console.log(data);
-    //     });
-    //   fmp.api
-    //     .stock('GOOG')
-    //     .quote()
-    //     .then((res) => console.log(res))
-    //     .catch((err) => console.log(err));
+    // Extract symbols from the watchlist
+    const symbols = watchList.map((item) => item.symbol);
+
+    // Fetch stock data for each symbol
+    Promise.all(symbols.map((symbol) => fmp.api.stock(symbol).quote()))
+      .then((responses) => {
+        const stocksData = responses.map((response) => response[0]);
+        setState({ stocksData });
+      })
+      .catch((error) => {
+        console.error('Error fetching stock data:', error);
+      });
   };
 
   return (

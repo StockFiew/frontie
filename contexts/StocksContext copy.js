@@ -54,14 +54,14 @@ export const StocksProvider = ({ children }) => {
   };
 
   return (
-    <StocksContext.Provider value={[state, addToWatchlist, clearWatchlist]}>
+    <StocksContext.Provider value={[state, addToWatchlist]}>
       {children}
     </StocksContext.Provider>
   );
 };
 
 export const useStocksContext = () => {
-  const [state, addToWatchlist, clearWatchlist] = useContext(StocksContext);
+  const [state, addToWatchlist] = useContext(StocksContext);
 
   useEffect(() => {
     // Retrieve watchlist from persistent storage

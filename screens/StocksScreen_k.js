@@ -2,49 +2,51 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
-
-import watchlistApi from '../services/watchlistApi';
-
-// (delete before submission) FixMe: implement other components
-// and functions used in StocksScreen here (don't just put all the JSX in StocksScreen below)
+import fmp from '../services/fmp';
+import alpha from '../services/alpha';
 
 export default function StocksScreen({ route }) {
   const { ServerURL, watchList } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
 
   useEffect(() => {
-    // (delete before submission) FixMe: fetch stock data from the server
-    // for any new symbols added to the watchlist
-    // and save in local StocksScreen statev
     fetchStockData();
   }, [watchList]);
 
-  // (delete before submission) can put more code here
-
-  const fetchStockData = async () => {
-    try {
-      const response = await fetch(`${ServerURL}/stocks`);
-      const data = await response.json();
-      setState((prevState) => ({
-        ...prevState,
-        stocksData: data.stocks,
-      }));
-    } catch (error) {
-      console.log('Error fetching stock data:', error);
-    }
+  const fetchStockData = () => {
+    // Call the API to fetch stock data for each symbol in the watchlist
+    Promise.all(
+      watchList.map((symbol) =>
+        fmp.api
+          .stock(symbol)
+          .quote()
+          .then((res) => res.data)
+          .catch((error) => {
+            console.log(`Error fetching stock data for ${symbol}:`, error);
+            return null;
+          })
+      )
+    )
+      .then((data) => {
+        // Filter out any null values (error occurred during API call)
+        const filteredData = data.filter((item) => item !== null);
+        setState({ stocksData: filteredData });
+      })
+      .catch((error) => {
+        console.log('Error fetching stock data:', error);
+        setState({ stocksData: [] });
+      });
   };
 
   return (
     <View style={styles.container}>
-      {/* (delete before submission) FixMe: add children here! */}
-
       <FlatList
         data={state.stocksData}
         keyExtractor={(item) => item.symbol}
         renderItem={({ item }) => (
           <View style={styles.stockItem}>
             <Text>{item.symbol}</Text>
-            <Text>{item.companyName}</Text>
+            {/* <Text>{item.name}</Text> */}
             {/* Display other stock information */}
           </View>
         )}
@@ -54,8 +56,6 @@ export default function StocksScreen({ route }) {
 }
 
 const styles = StyleSheet.create({
-  // (delete before submission) FixMe: add styles here ...
-  // (delete before submission) use scaleSize(x) to adjust sizes for small/large screens
   container: {
     flex: 1,
     padding: scaleSize(16),
@@ -67,5 +67,4 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
   },
-  // (delete before submission) Add other styles as needed
 });

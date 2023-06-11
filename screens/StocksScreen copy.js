@@ -14,17 +14,13 @@ export default function StocksScreen({ route }) {
   }, [watchList]);
 
   const fetchStockData = () => {
-    alpha.api.data
-      .intraday('msft')
-      .then((data) => JSON.stringify(data))
-      .then((data) => {
-        console.log(data);
-      });
-    fmp.api
-      .stock('GOOG')
-      .quote()
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
+    // alpha.api.data.intraday('msft').then((data) => JSON.stringify(data))
+    //   .then((data) => {
+    //     console.log(data)
+    //     });
+    // fmp.api.stock('GOOG').quote()
+    //   .then((res) => console.log(res))
+    //   .catch((err) => console.log(err))
   };
 
   return (
