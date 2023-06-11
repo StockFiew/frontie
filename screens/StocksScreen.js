@@ -1,12 +1,19 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, FlatList } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+} from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
 
 export default function StocksScreen({ route }) {
-  const { ServerURL, watchList } = useStocksContext();
+  const { ServerURL, watchList, removeFromWatchlist } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
 
   useEffect(() => {
@@ -28,18 +35,45 @@ export default function StocksScreen({ route }) {
       });
   };
 
+  const renderStockItem = ({ item }) => {
+    const handleDelete = () => {
+      Alert.alert(
+        'Delete Stock',
+        'Are you sure you want to remove this stock from your watchlist?',
+        [
+          {
+            text: 'Cancel',
+            style: 'cancel',
+          },
+          {
+            text: 'Delete',
+            style: 'destructive',
+            onPress: () => removeFromWatchlist(item.symbol),
+          },
+        ],
+        { cancelable: true }
+      );
+    };
+
+    return (
+      <TouchableOpacity
+        style={styles.stockItem}
+        onPress={handleDelete}
+        // onLongPress={handleDelete}
+      >
+        <Text>{item.symbol}</Text>
+        <Text>{item.companyName}</Text>
+        {/* Display other stock information */}
+      </TouchableOpacity>
+    );
+  };
+
   return (
     <View style={styles.container}>
       <FlatList
         data={state.stocksData}
         keyExtractor={(item) => item.symbol}
-        renderItem={({ item }) => (
-          <View style={styles.stockItem}>
-            <Text>{item.symbol}</Text>
-            <Text>{item.companyName}</Text>
-            {/* Display other stock information */}
-          </View>
-        )}
+        renderItem={renderStockItem}
       />
     </View>
   );

@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { API_URL } from '@env';
+// API_URL=https://172.26.22.24:3000/
 
 const StocksContext = React.createContext();
 
@@ -19,17 +20,8 @@ export const StocksProvider = ({ children }) => {
     // Save watchlist to AsyncStorage
     saveWatchlist(updatedWatchlist);
     // Log the updated watchlist
-    console.log('ADDED: Updated Watchlist:', updatedWatchlist);
-  };
 
-  const removeFromWatchlist = async (symbol) => {
-    // Remove the symbol from the watchlist
-    const updatedWatchlist = state.filter((item) => item.symbol !== symbol);
-    setState(updatedWatchlist);
-    // Save watchlist to AsyncStorage
-    saveWatchlist(updatedWatchlist);
-    // Log the updated watchlist
-    console.log('REMOVED: Updated Watchlist:', updatedWatchlist);
+    console.log('Updated Watchlist:', updatedWatchlist);
   };
 
   const retrieveWatchlist = async () => {
@@ -62,17 +54,14 @@ export const StocksProvider = ({ children }) => {
   };
 
   return (
-    <StocksContext.Provider
-      value={[state, addToWatchlist, removeFromWatchlist, clearWatchlist]}
-    >
+    <StocksContext.Provider value={[state, addToWatchlist, clearWatchlist]}>
       {children}
     </StocksContext.Provider>
   );
 };
 
 export const useStocksContext = () => {
-  const [state, addToWatchlist, removeFromWatchlist, clearWatchlist] =
-    useContext(StocksContext);
+  const [state, addToWatchlist, clearWatchlist] = useContext(StocksContext);
 
   useEffect(() => {
     // Retrieve watchlist from persistent storage
@@ -84,7 +73,6 @@ export const useStocksContext = () => {
     ServerURL: API_URL,
     watchList: state,
     addToWatchlist,
-    removeFromWatchlist,
     clearWatchlist,
   };
 };

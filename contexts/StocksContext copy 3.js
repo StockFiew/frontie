@@ -24,12 +24,12 @@ export const StocksProvider = ({ children }) => {
 
   const removeFromWatchlist = async (symbol) => {
     // Remove the symbol from the watchlist
-    const updatedWatchlist = state.filter((item) => item.symbol !== symbol);
+    const updatedWatchlist = state.filter((item) => item !== symbol);
     setState(updatedWatchlist);
     // Save watchlist to AsyncStorage
     saveWatchlist(updatedWatchlist);
     // Log the updated watchlist
-    console.log('REMOVED: Updated Watchlist:', updatedWatchlist);
+    console.log('REMOVEd: Updated Watchlist:', updatedWatchlist);
   };
 
   const retrieveWatchlist = async () => {

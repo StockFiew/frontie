@@ -14,27 +14,17 @@ export default function StocksScreen({ route }) {
   }, [watchList]);
 
   const fetchStockData = () => {
-    // Call the API to fetch stock data for each symbol in the watchlist
-    Promise.all(
-      watchList.map((symbol) =>
-        fmp.api
-          .stock(symbol)
-          .quote()
-          .then((res) => res.data)
-          .catch((error) => {
-            console.log(`Error fetching stock data for ${symbol}:`, error);
-            return null;
-          })
-      )
-    )
-      .then((data) => {
-        // Filter out any null values (error occurred during API call)
-        const filteredData = data.filter((item) => item !== null);
-        setState({ stocksData: filteredData });
+    // Extract symbols from the watchlist
+    const symbols = watchList.map((item) => item.symbol);
+
+    // Fetch stock data for each symbol
+    Promise.all(symbols.map((symbol) => fmp.api.stock(symbol).quote()))
+      .then((responses) => {
+        const stocksData = responses.map((response) => response[0]);
+        setState({ stocksData });
       })
       .catch((error) => {
-        console.log('Error fetching stock data:', error);
-        setState({ stocksData: [] });
+        console.error('Error fetching stock data:', error);
       });
   };
 
@@ -46,7 +36,7 @@ export default function StocksScreen({ route }) {
         renderItem={({ item }) => (
           <View style={styles.stockItem}>
             <Text>{item.symbol}</Text>
-            {/* <Text>{item.name}</Text> */}
+            <Text>{item.companyName}</Text>
             {/* Display other stock information */}
           </View>
         )}
