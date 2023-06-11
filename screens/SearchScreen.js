@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   Keyboard,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
 import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
@@ -70,25 +71,65 @@ export default function SearchScreen({ route }) {
     setShowNoResults(false);
   };
 
-  // NEW
+  // Add to watchlist and navigete to StocksScreen
+
+  // const addToWatchlistAndNavigate = (item) => {
+  //   addToWatchlist(item);
+  //   // clearWatchlist(); // for the test, it will be deleted
+  //   navigation.navigate('Stocks');
+  // };
+
   const addToWatchlistAndNavigate = (item) => {
-    addToWatchlist(item);
-    navigation.navigate('Stocks');
+    const isAlreadyAdded = watchList.some(
+      (stock) => stock.symbol === item.symbol
+    );
+
+    if (isAlreadyAdded) {
+      Alert.alert('Already Added', 'This stock is already in your watchlist.');
+    } else {
+      addToWatchlist(item);
+      navigation.navigate('Stocks');
+    }
   };
 
-  const renderStockItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.stockItem}
-      onPress={() => {
-        addToWatchlist(item);
-        addToWatchlistAndNavigate(item);
-      }}
-    >
-      <Text style={styles.stockSymbol}>{item.symbol}</Text>
-      <Text style={styles.stockName}>{item.name}</Text>
-      <Text style={styles.stockExchange}>{item.stockExchange}</Text>
-    </TouchableOpacity>
-  );
+  // const renderStockItem = ({ item }) => {
+  //   const isAlreadyAdded = watchList.some(
+  //     (stock) => stock.symbol === item.symbol
+  //   );
+  //   if (isAlreadyAdded) {
+  //     Alert.alert('Already Added', 'This stock is already in your watchlist.');
+  //   } else {
+  //     addToWatchlist(item);
+  //     navigation.navigate('Stocks');
+  //   }
+  //   const handleAddToWatchlist = () => {
+  //     if (!isAlreadyAdded) {
+  //       addToWatchlistAndNavigate(item);
+  //     }
+  //   };
+
+  //   return (
+  //     <TouchableOpacity style={styles.stockItem} onPress={handleAddToWatchlist}>
+  //       <Text style={styles.stockSymbol}>{item.symbol}</Text>
+  //       <Text style={styles.stockName}>{item.name}</Text>
+  //       <Text style={styles.stockExchange}>{item.stockExchange}</Text>
+  //     </TouchableOpacity>
+  //   );
+  // };
+
+  const renderStockItem = ({ item }) => {
+    const handleAddToWatchlist = () => {
+      addToWatchlistAndNavigate(item);
+    };
+
+    return (
+      <TouchableOpacity style={styles.stockItem} onPress={handleAddToWatchlist}>
+        <Text style={styles.stockSymbol}>{item.symbol}</Text>
+        <Text style={styles.stockName}>{item.name}</Text>
+        <Text style={styles.stockExchange}>{item.stockExchange}</Text>
+      </TouchableOpacity>
+    );
+  };
 
   return (
     <View style={styles.container}>
