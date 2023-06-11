@@ -11,17 +11,26 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/images/icon_trans.png'; // Relative path to the image
 import { scaleSize } from '../constants/Layout';
+import api from '../services/user';
 
 export default function SignInScreen() {
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+  const user = api.user();
 
   const onSignIn = () => {
-    Alert.alert(`Hi, ${username}!`, 'Good to see you again');
-    console.log(`${username} + ${password}`);
-    navigation.navigate('Home'); // Navigate to the 'Home' screen
+    user.login(email, password)
+      .then((user) => {
+        console.log('Logged in user:', user);
+        console.log('User successfully signed in!');
+        Alert.alert('Welcome back!', 'Good to see you again');
+        navigation.navigate('Home'); // Navigate to the 'Home' screen
+      })
+      .catch((err) => {
+        console.log('Error signing in:', err);
+      })
   };
 
   const onSignUp = () => {
@@ -34,8 +43,8 @@ export default function SignInScreen() {
       <View style={styles.secondContainer}>
         <Text style={styles.title}>Sign in</Text>
         <TextInput
-          value={username}
-          onChangeText={setUsername}
+          value={email}
+          onChangeText={setEmail}
           placeholder='Username'
           placeholderTextColor='#F2F2F2'
           style={styles.input}
