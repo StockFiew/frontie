@@ -28,23 +28,28 @@ export default function SearchScreen({ route }) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    // fetchStockData();
-    fetchSearchData();
+    fetchStockData();
+    // fetchSearchData();
   }, [watchList]);
 
-  const fetchSearchData = () => {
-    fmp
-      .search('GOOG')
-      .then((res) => console.log(res))
-      .catch((err) => console.log(err));
-  };
+  // const fetchSearchData = () => {
+  //   fmp.api
+  //     .search('GOOG')
+  //     .then((res) => console.log(res))
+  //     .catch((err) => console.log(err));
+  // };
+
   // ^ test code
 
   const fetchStockData = () => {
+    alpha.api.data.daily_adjusted('AAPL').then((res) => console.log(res));
+    // .catch((err) => console.log(err));
+
     // fmp.api
     //   .stock('GOOG')
     //   .quote()
     //   .then((res) => console.log(res));
+
     // ^ test code
 
     setIsSearching(true);

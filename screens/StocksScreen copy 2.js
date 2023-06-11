@@ -11,13 +11,13 @@ import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
 import fmp from '../services/fmp';
 import alpha from '../services/alpha';
+import StocksChart from '../components/StocksChart';
 import { useNavigation } from '@react-navigation/native';
 
 export default function StocksScreen({ route }) {
   const { ServerURL, watchList, removeFromWatchlist } = useStocksContext();
   const [state, setState] = useState({ stocksData: [] });
   const [selectedStock, setSelectedStock] = useState(null); // maintain selected state
-  const navigation = useNavigation();
 
   useEffect(() => {
     fetchStockData();
@@ -42,13 +42,6 @@ export default function StocksScreen({ route }) {
     }
   };
 
-  const handleStockItemClick = (stock) => {
-    setSelectedStock(stock);
-    // navigation.navigate('StocksChart', { data: stock.data });
-    navigation.navigate('StocksChart');
-    // ^ passing value later !
-  };
-
   const renderStockItem = ({ item }) => {
     const handleDelete = () => {
       Alert.alert(
@@ -69,8 +62,13 @@ export default function StocksScreen({ route }) {
       );
     };
 
+    const handleStockItemPress = () => {
+      setSelectedStock(item);
+    };
+    // when user clicks a symbol
+
     return (
-      <TouchableOpacity onPress={() => handleStockItemClick(item)}>
+      <TouchableOpacity onPress={handleStockItemPress}>
         <View style={styles.stockItem}>
           <Text style={styles.stockSymbol}>{item.symbol}</Text>
           <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
@@ -92,6 +90,12 @@ export default function StocksScreen({ route }) {
             contentContainerStyle={styles.flatListContent}
             ItemSeparatorComponent={() => <View style={styles.separator} />}
           />
+          {selectedStock && (
+            <React.Fragment>
+              <StocksChart data={selectedStock.data} />
+              {/* can add other components */}
+            </React.Fragment>
+          )}
         </React.Fragment>
       ) : (
         <Text style={styles.noWatchlistText}>No stocks in watchlist</Text>
@@ -100,6 +104,8 @@ export default function StocksScreen({ route }) {
   );
 }
 
+// https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo
+// for chart
 const styles = StyleSheet.create({
   container: {
     flex: 1,
