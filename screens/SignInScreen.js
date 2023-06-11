@@ -45,7 +45,7 @@ export default function SignInScreen() {
         <TextInput
           value={email}
           onChangeText={setEmail}
-          placeholder='Username'
+          placeholder='Email'
           placeholderTextColor='#F2F2F2'
           style={styles.input}
         />
