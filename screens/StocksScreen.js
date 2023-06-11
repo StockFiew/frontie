@@ -44,9 +44,6 @@ export default function StocksScreen({ route }) {
 
   const handleStockItemClick = (stock) => {
     setSelectedStock(stock);
-    // navigation.navigate('StocksChart', { data: stock.data });
-    navigation.navigate('StocksChart');
-    // ^ passing value later !
   };
 
   const renderStockItem = ({ item }) => {
