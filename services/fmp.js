@@ -18,17 +18,6 @@ const news = (symbols) => {
       throw err;
     });
 };
-const search = (symbols, limit, exchange) => {
-  const url = `https://financialmodelingprep.com/api/v3/search?query=${symbols}&limit=${limit}&exchange=${exchange}&apikey=${FMP_API_SECRET}`;
-
-  return axios
-    .get(url)
-    .then((res) => res.data)
-    .catch((err) => {
-      console.error(err);
-      throw err;
-    });
-};
 
 const fmp = {
   api,

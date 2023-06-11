@@ -18,6 +18,7 @@ export default function StocksScreen({ route }) {
 
   useEffect(() => {
     fetchStockData();
+    //fetchSearchData();
   }, [watchList]);
 
   const fetchStockData = async () => {
