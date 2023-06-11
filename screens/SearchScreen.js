@@ -28,13 +28,26 @@ export default function SearchScreen({ route }) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetchStockData();
+    // fetchStockData();
+    fetchSearchData();
   }, [watchList]);
 
+  const fetchSearchData = () => {
+    fmp.api
+      .search('GOOG')
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
+  };
+
   const fetchStockData = () => {
+    fmp.api
+      .stock('GOOG')
+      .quote()
+      .then((res) => console.log(res));
+
     setIsSearching(true);
     if (keywords.length > 0) {
-      fmp
+      fmp.api
         .search(keywords, 10000, 'NASDAQ')
         .then((res) => {
           setStocksData(res);

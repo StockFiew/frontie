@@ -22,7 +22,7 @@ const news = (symbols) => {
 const fmp = {
   api,
   news,
-  search,
+  // search,
 };
 
 export default fmp;
