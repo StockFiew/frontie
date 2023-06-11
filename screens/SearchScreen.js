@@ -16,6 +16,7 @@ import fmp from '../services/fmp';
 import alpha from '../services/alpha';
 import { FMP_API_SECRET } from '@env';
 import { useNavigation } from '@react-navigation/native';
+import watchlist from "../services/watchlist";
 
 export default function SearchScreen({ route }) {
   // const { ServerURL, watchList, addToWatchlist } = useStocksContext();
@@ -28,12 +29,17 @@ export default function SearchScreen({ route }) {
   const navigation = useNavigation();
 
   useEffect(() => {
-    fetchStockData();
+    //fetchStockData();
+    fetchWatchList();
     // fetchSearchData();
   }, [watchList]);
+  const fetchWatchList = () => {
+    const userList = watchlist.getList()
+    setStocksData(userList)
+  }
 
-  const fetchSearchData = (keywords) => {
-    const result = fmp.api.search(keywords, 50)
+  const fetchSearchData = () => {
+    const result = fmp.search('AAPL', 50)
       .then((res) => {
         setStocksData(res.json());
         setIsSearching(false);
@@ -48,15 +54,10 @@ export default function SearchScreen({ route }) {
   // ^ test code
 
   const fetchStockData = (keywords) => {
-     //fmp.api
-     //  .stock('GOOG')
-     //  .quote()
-     //  .then((res) => console.log(res));
-
     setIsSearching(true);
-    if (keywords.length > 0) {
-      fmp.api
-        .search(keywords, 10000, 'NASDAQ')
+    if (keywords !== undefined && keywords.length > 0) {
+      console.log(keywords);
+      fmp.search(keywords, 10000, 'NASDAQ')
         .then((res) => {
           setStocksData(res);
           setIsSearching(false);
@@ -75,6 +76,9 @@ export default function SearchScreen({ route }) {
   };
 
   const filterStocks = (data) => {
+    if (!data) {
+      return
+    }
     return data.filter(
       (item) =>
         item.symbol.toLowerCase().includes(keywords.toLowerCase()) ||

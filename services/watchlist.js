@@ -1,7 +1,7 @@
 import sendAuthenticatedRequest from './api';
 import { API_URL } from '@env';
 
-const watchlist = {
+export const watchlist = {
     getList() {
         return sendAuthenticatedRequest(`${API_URL}/watchlist`)
           .then(data => data.watchlist)

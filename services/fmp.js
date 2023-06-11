@@ -7,10 +7,10 @@ const api = fmpapi(FMP_API_SECRET);
 
 const search = (symbols, limit, exchange) => {
   const url = `https://financialmodelingprep.com/api/v3/search?query=${symbols}&limit=${limit}&exchange=${exchange}&apikey=${FMP_API_SECRET}`;
+  console.log(url)
 
-  return axios
-    .get(url)
-    .then((res) => res.data)
+  return axios.get(url)
+    .then((res) => res.json())
     .catch((err) => {
       console.error(err);
       throw err;
