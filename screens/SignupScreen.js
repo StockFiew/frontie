@@ -1,25 +1,26 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet, Text, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import userApi from '../services/userApi.js';
+import api from '../services/user';
 import { scaleSize } from '../constants/Layout';
 
 export default function SignUpScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const userApi = api.user();
   const navigation = useNavigation();
 
   const onSignUp = async () => {
     try {
       // Signup logic starts here
-      const user = await registerUser(email, password);
-      // can't load registerUser..maybe i can't figure it out api...
-      console.log('Registered user:', user);
-      console.log('User successfully signed up!');
-      // ^ for the test
-      Alert.alert('Welcome to StockFiew!', 'Your sign up has been completed');
-      navigation.navigate('SignIn'); // Navigate to the 'SignIn' screen
+      userApi.register(email, password)
+        .then((user) => {
+          console.log('Registered user:', user);
+          console.log('User successfully signed up!');
+          Alert.alert('Welcome to StockFiew!', 'Your sign up has been completed');
+          navigation.navigate('Home'); // Navigate to the 'SignIn' screen
+        });
     } catch (err) {
       console.log('Error signing up:', err);
     }

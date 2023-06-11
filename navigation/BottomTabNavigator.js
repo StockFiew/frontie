@@ -3,12 +3,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import TabBarIcon from '../components/TabBarIcon';
 import StocksScreen from '../screens/StocksScreen';
 import SearchScreen from '../screens/SearchScreen';
-import SignInScreen from '../screens/SignInScreen';
-import SignUpScreen from '../screens/SignUpScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
+import UserScreen from "../screens/UserScreen";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'Stocks';
+const INITIAL_ROUTE_NAME = 'User';
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
@@ -43,6 +42,16 @@ export default function BottomTabNavigator({ navigation, route }) {
           title: 'Search',
           tabBarIcon: ({ focused }) => (
             <TabBarIcon focused={focused} name='md-search' />
+          ),
+        }}
+      />
+      <BottomTab.Screen
+        name='User'
+        component={UserScreen}
+        options={{
+          title: 'User',
+          tabBarIcon: ({ focused }) => (
+            <TabBarIcon focused={focused} name='md-trending-up' />
           ),
         }}
       />

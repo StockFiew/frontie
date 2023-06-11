@@ -7,6 +7,7 @@ import { StocksProvider } from './contexts/StocksContext';
 import 'react-native-gesture-handler';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import UserScreen from "./screens/UserScreen";
 
 const Stack = createStackNavigator();
 

@@ -7,36 +7,29 @@ import {
   TouchableOpacity,
   Alert,
 } from 'react-native';
-import { useStocksContext } from '../contexts/StocksContext';
 import { scaleSize } from '../constants/Layout';
-import fmp from '../services/fmp';
-import alpha from '../services/alpha';
-import { useNavigation } from '@react-navigation/native';
+import watchlist from "../services/watchlist";
+import sendAuthenticatedRequest from "../services/api";
+import {api} from "../services/fmp";
 
 export default function StocksScreen({ route }) {
-  const { ServerURL, watchList, removeFromWatchlist } = useStocksContext();
-  const [state, setState] = useState({ stocksData: [] });
-  const [selectedStock, setSelectedStock] = useState(null); // maintain selected state
-  const navigation = useNavigation();
+  const [stocks, setStocks] = useState([]);
+  const [watchList, setWatchList] = useState([]);
 
   useEffect(() => {
     fetchStockData();
     //fetchSearchData();
   }, [watchList]);
-
   const fetchStockData = async () => {
-    const symbols = watchList
-      .filter((item) => item && item.symbol)
-      .map((item) => item.symbol);
-
     try {
+      console.log("fetching watchlist");
+      setWatchList(watchlist.getList());
+      console.log("watch list fetched");
       // Fetch stock data for each symbol
-      const responses = await Promise.all(
-        symbols.map((symbol) => fmp.api.stock(symbol).quote())
-        // symbols.map((symbol) => alpha.api.data.quote(symbol))
-      );
-      const stocksData = responses.map((response) => response[0]);
-      setState({ stocksData });
+      if (watchList.length !== 0) {
+        const stocksList = watchList.map((item) => api.stock(item).quote());
+        setStocks(responses.map((response) => response[0]));
+      }
     } catch (error) {
       console.error('Error fetching stock data:', error);
     }
@@ -80,18 +73,16 @@ export default function StocksScreen({ route }) {
 
   return (
     <View style={styles.container}>
-      {state.stocksData.length > 0 ? (
-        <React.Fragment>
-          <FlatList
-            data={state.stocksData}
-            keyExtractor={(item) => item.symbol}
-            renderItem={renderStockItem}
-            contentContainerStyle={styles.flatListContent}
-            ItemSeparatorComponent={() => <View style={styles.separator} />}
-          />
-        </React.Fragment>
+      {stocks.length > 0 ? (
+        <FlatList
+          data={stocks}
+          keyExtractor={(item) => item.symbol}
+          renderItem={renderStockItem}
+          contentContainerStyle={styles.flatListContent}
+          ItemSeparatorComponent={() => <View style={styles.separator} />}
+        />
       ) : (
-        <Text style={styles.noWatchlistText}>No stocks in watchlist</Text>
+        <Text style={styles.noWatchlistText}>No stocks in watchlist, use Search function to add stocks!</Text>
       )}
     </View>
   );

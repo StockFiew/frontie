@@ -32,25 +32,26 @@ export default function SearchScreen({ route }) {
     // fetchSearchData();
   }, [watchList]);
 
-  // const fetchSearchData = () => {
-  //   fmp.api
-  //     .search('GOOG')
-  //     .then((res) => console.log(res))
-  //     .catch((err) => console.log(err));
-  // };
-
+  const fetchSearchData = (keywords) => {
+    const result = fmp.api.search(keywords, 50)
+      .then((res) => {
+        setStocksData(res.json());
+        setIsSearching(false);
+        setShowNoResults(res.length === 0);
+      })
+      .catch((error) => {
+        console.log('Error fetching stock data:', error);
+        setIsSearching(false);
+        setShowNoResults(false);
+      });
+  };
   // ^ test code
 
-  const fetchStockData = () => {
-    alpha.api.data.daily_adjusted('AAPL').then((res) => console.log(res));
-    // .catch((err) => console.log(err));
-
-    // fmp.api
-    //   .stock('GOOG')
-    //   .quote()
-    //   .then((res) => console.log(res));
-
-    // ^ test code
+  const fetchStockData = (keywords) => {
+     //fmp.api
+     //  .stock('GOOG')
+     //  .quote()
+     //  .then((res) => console.log(res));
 
     setIsSearching(true);
     if (keywords.length > 0) {
@@ -81,9 +82,10 @@ export default function SearchScreen({ route }) {
     );
   };
 
-  const handleSearch = () => {
+  const handleSearch = (keywords) => {
+    console.log(keywords)
     Keyboard.dismiss();
-    fetchStockData();
+    fetchSearchData(keywords);
   };
 
   const handleKeywordsChange = (text) => {
