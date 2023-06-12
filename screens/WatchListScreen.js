@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableOpacity, FlatList } from 'react-native';
+import { Animated, StyleSheet, View, TextInput, Text, TouchableOpacity, FlatList } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import fmp from "../services/fmp";
 import watchlist from "../services/watchlist";
-import { Swipeable } from 'react-native-gesture-handler';
-import {useNavigation} from "@react-navigation/native";
+import {RectButton, Swipeable} from 'react-native-gesture-handler';
+import { useNavigation } from "@react-navigation/native";
 
 export function WatchListScreen() {
   const [query, setQuery] = useState('');
@@ -73,16 +73,23 @@ export function WatchListScreen() {
     const renderLeftActions = (progress, dragX) => {
       if (!isWatched) {
         const trans = dragX.interpolate({
-          inputRange: [0, 50, 100],
-          outputRange: [0, 0, 1],
-        })
+          inputRange: [0, 50, 100, 101],
+          outputRange: [-20, 0, 0, 1],
+          extrapolate: 'clamp',
+        });
 
         return (
-          <TouchableOpacity onPress={handleAdd}>
-            <View style={styles.addButton}>
-              <Text style={styles.addButtonText}>Add</Text>
-            </View>
-          </TouchableOpacity>
+          <RectButton style={styles.addButton} onPress={handleAdd}>
+            <Animated.Text
+              style={[
+                styles.addButtonText,
+                {
+                  transform: [{ translateX: trans }],
+                },
+              ]}>
+              Add
+            </Animated.Text>
+          </RectButton>
         );
       }
     };
@@ -90,16 +97,19 @@ export function WatchListScreen() {
     const renderRightActions = (progress, dragX) => {
       if (isWatched) {
         const trans = dragX.interpolate({
-          inputRange: [0, 50, 100],
-          outputRange: [0, 0, 1],
+          inputRange: [-101, -100, -50, 0],
+          outputRange: [-1, 0, 0, 20],
+          extrapolate: 'clamp',
         })
 
         return (
-          <TouchableOpacity onPress={handleDelete}>
-            <View style={styles.deleteButton}>
+          <Animated.View style={{ flex: 0, transform: [{ translateX: trans }] }}>
+            <RectButton
+              style={styles.deleteButton}
+              onPress={handleDelete}>
               <Text style={styles.deleteButtonText}>Delete</Text>
-            </View>
-          </TouchableOpacity>
+            </RectButton>
+          </Animated.View>
         );
       }
     }
@@ -113,6 +123,11 @@ export function WatchListScreen() {
     return (
       <View>
         <Swipeable
+          ref={swipeRef}
+          friction={2}
+          enableTrackpadTwoFingerGesture
+          leftThreshold={30}
+          rightThreshold={40}
           renderLeftActions={renderLeftActions}
           renderRightActions={renderRightActions}
           onSwipeableClose={onSwipableClose}
@@ -158,6 +173,7 @@ export function WatchListScreen() {
 
   const handleSearchTextClear = () => {
     setQuery('')
+    loadWatchlist().then(r => r);
   }
 
   return (

@@ -36,6 +36,7 @@
     "react-native-gesture-handler": "~2.9.0",
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
+    "react-native-swipeable": "^0.6.0",
     "react-native-web": "~0.18.11",
     "react-redux": "^8.0.7"
   },
