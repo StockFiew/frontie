@@ -41,6 +41,7 @@ export function WatchListScreen() {
 
   const renderItem = ({ item }) => {
     const isWatched = stockWatch.some(i => i.symbol === item.symbol);
+
     const handleDelete = () => {
       watchlist.deleteItem({ symbol: item.symbol })
         .then(() => {
@@ -56,59 +57,67 @@ export function WatchListScreen() {
     };
 
     const handleAdd = () => {
-      console.log(stockWatch);
-      if (stockWatch.some(i => i.symbol === item.symbol)) {
-        console.log('already watched');
-        swipeRef.current.close();
-      }
-      else {
-        watchlist.addItem({ symbol: item.symbol, stockExchange: item.stockExchange, name: item.name })
-          .then(() => {
+      watchlist.addItem({ symbol: item.symbol, stockExchange: item.stockExchange, name: item.name })
+        .then(() => {
+          loadWatchlist().then(r => {
+            console.log(r);
             swipeRef.current.close();
-            loadWatchlist().then(r => {
-              console.log(r);
-            })
           })
-          .catch((error) => {
-            // handle errors here
-            console.log(error);
-          });
+        })
+        .catch((error) => {
+          // handle errors here
+          console.log(error);
+        });
+    }
+
+    const renderLeftActions = (progress, dragX) => {
+      if (!isWatched) {
+        const trans = dragX.interpolate({
+          inputRange: [0, 50, 100],
+          outputRange: [0, 0, 1],
+        })
+
+        return (
+          <TouchableOpacity onPress={handleAdd}>
+            <View style={styles.addButton}>
+              <Text style={styles.addButtonText}>Add</Text>
+            </View>
+          </TouchableOpacity>
+        );
+      }
+    };
+
+    const renderRightActions = (progress, dragX) => {
+      if (isWatched) {
+        const trans = dragX.interpolate({
+          inputRange: [0, 50, 100],
+          outputRange: [0, 0, 1],
+        })
+
+        return (
+          <TouchableOpacity onPress={handleDelete}>
+            <View style={styles.deleteButton}>
+              <Text style={styles.deleteButtonText}>Delete</Text>
+            </View>
+          </TouchableOpacity>
+        );
       }
     }
 
-    const renderRightActions = (progress, dragX) => {
-      const trans = dragX.interpolate({
-        inputRange: [0, 50, 100],
-        outputRange: [0, 0, 1],
-      });
-
-      return (
-        <TouchableOpacity onPress={handleDelete}>
-          <View style={styles.deleteButton}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </View>
-        </TouchableOpacity>
-      );
-    };
-
-    const renderLeftActions = (progress, dragX) => {
-      const trans = dragX.interpolate({
-        inputRange: [0, 50, 100],
-        outputRange: [0, 0, 1],
-      })
-
-      return (
-        <TouchableOpacity onPress={handleAdd}>
-          <View style={styles.addButton}>
-            <Text style={styles.addButtonText}>Add</Text>
-          </View>
-        </TouchableOpacity>
-      );
+    const onSwipableClose = () => {
+      if (swipeRef.current) {
+        swipeRef.current.close();
+      }
     }
 
     return (
-        <Swipeable ref={swipeRef} renderLeftActions={renderLeftActions} renderRightActions={renderRightActions}>
-          <TouchableOpacity style={styles.item} onPress={handlePress}>
+      <View>
+        <Swipeable
+          renderLeftActions={renderLeftActions}
+          renderRightActions={renderRightActions}
+          onSwipeableClose={onSwipableClose}
+        >
+          <TouchableOpacity style={styles.item} onPress={() => handlePress(item)}>
             <View style={styles.itemContent}>
               <Text style={styles.symbol}>{item.symbol}</Text>
               <Text style={styles.name}>{item.name}</Text>
@@ -117,6 +126,7 @@ export function WatchListScreen() {
             {isWatched && <Ionicons name="checkmark" size={24} color="#008000"/>}
           </TouchableOpacity>
         </Swipeable>
+      </View>
     )
   };
 
@@ -172,39 +182,13 @@ export function WatchListScreen() {
           data={searchResults}
           keyExtractor={item => item.symbol}
           style={styles.list}
-          renderItem={( { item } ) => {
-            if (stockWatch.some(i => i.symbol === item.symbol)) {
-              return (
-                <TouchableOpacity style={styles.item} onPress={handlePress}>
-                  <View style={styles.itemContent}>
-                    <Text style={styles.symbol}>{item.symbol}</Text>
-                    <Text style={styles.name}>{item.name}</Text>
-                    <Text style={styles.exchange}>{item.stockExchange}</Text>
-                  </View>
-                  <Ionicons name="checkmark" size={24} color="#008000"/>
-                </TouchableOpacity>
-              )
-            } else {
-              return renderItem({item});
-            }
-          }}
+          renderItem={renderItem}
         />
       )}
       {searchResults.length === 0 && (
         <FlatList
           data={stockWatch}
-          renderItem={( { item } ) => {
-            return (
-              <TouchableOpacity style={styles.item} onPress={handlePress}>
-                <View style={styles.itemContent}>
-                  <Text style={styles.symbol}>{item.symbol}</Text>
-                  <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.exchange}>{item.stockExchange}</Text>
-                </View>
-                <Ionicons name="checkmark" size={24} color="#008000"/>
-              </TouchableOpacity>
-            )
-          }}
+          renderItem={renderItem}
           keyExtractor={item => item.symbol}
           style={styles.list}
         />
