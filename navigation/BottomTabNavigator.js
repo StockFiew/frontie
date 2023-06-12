@@ -5,9 +5,10 @@ import StocksScreen from '../screens/StocksScreen';
 import WatchListScreen from '../screens/WatchListScreen';
 import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 import UserScreen from "../screens/UserScreen";
+import WatchListNavigator from "./WatchListNavigator";
 
 const BottomTab = createBottomTabNavigator();
-const INITIAL_ROUTE_NAME = 'User';
+const INITIAL_ROUTE_NAME = 'WatchList';
 
 export default function BottomTabNavigator({ navigation, route }) {
   useEffect(() => {
@@ -26,18 +27,8 @@ export default function BottomTabNavigator({ navigation, route }) {
       }}
     >
       <BottomTab.Screen
-        name='Stocks'
-        component={StocksScreen}
-        options={{
-          title: 'Stocks',
-          tabBarIcon: ({ focused }) => (
-            <TabBarIcon focused={focused} name='md-trending-up' />
-          ),
-        }}
-      />
-      <BottomTab.Screen
-        name='Search'
-        component={WatchListScreen}
+        name='WatchList'
+        component={WatchListNavigator}
         options={{
           title: 'Watch List',
           tabBarIcon: ({ focused }) => (
@@ -55,8 +46,7 @@ export default function BottomTabNavigator({ navigation, route }) {
           ),
         }}
       />
-    </BottomTab.Navigator>
-  );
+    </BottomTab.Navigator>  );
 }
 
 function getHeaderTitle(route) {

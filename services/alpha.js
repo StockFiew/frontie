@@ -18,23 +18,20 @@ const api = vantage({ key: ALPHA_VENTAGE_API_KEY });
 
 const adjusted = (symbols) => {
   const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbols}&apikey=${ALPHA_VENTAGE_API_KEY}`;
-  fetch(url, {
+  return fetch(url, {
     headers: {
       'User-Agent': 'request',
     },
   })
     .then((res) => {
-      if (!res.status === 200) {
+      if (res.status !== 200) {
         throw new Error('Status: ' + res.status);
       }
       return res.json();
     })
-    .then((data) => {
-      console.log(data);
-      return data;
-    })
     .catch((err) => {
       console.log('Error:', err);
+      return null;
     });
 };
 

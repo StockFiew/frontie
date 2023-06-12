@@ -13,11 +13,10 @@ import logo from '../assets/images/icon_trans.png'; // Relative path to the imag
 import { scaleSize } from '../constants/Layout';
 import api from '../services/user';
 
-export default function SignInScreen() {
+export default function SignInScreen( {navigation, route} ) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const navigation = useNavigation();
   const user = api.user();
 
   const onSignIn = () => {
@@ -26,7 +25,7 @@ export default function SignInScreen() {
         console.log('Logged in user:', user);
         console.log('User successfully signed in!');
         Alert.alert('Welcome back!', 'Good to see you again');
-        navigation.navigate('Home'); // Navigate to the 'Home' screen
+        route.params.handleLogin();
       })
       .catch((err) => {
         console.log('Error signing in:', err);

@@ -1,148 +1,109 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  View,
-  Text,
-  FlatList,
-  TouchableOpacity,
-  Alert,
-} from 'react-native';
-import { scaleSize } from '../constants/Layout';
-import watchlist from "../services/watchlist";
-import sendAuthenticatedRequest from "../services/api";
-import {api} from "../services/fmp";
+import { StyleSheet, View, Text } from 'react-native';
+import { LineChart } from 'react-native-chart-kit';
+import fmp from '../services/fmp';
 
-export default function StocksScreen({ route }) {
-  const [stocks, setStocks] = useState([]);
-  const [watchList, setWatchList] = useState([]);
+const StockScreen = ({ route }) => {
+  const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchStockData();
-    //fetchSearchData();
+    fmp.price_target(route.params.symbol).then((result) => {
+      console.log(result);
+      setData(result);
+    });
   }, []);
-  const fetchStockData = async () => {
-    try {
-      // Fetch stock data for each symbol
-      if (watchList.length !== 0) {
-        const stocksList = watchList.map((item) => api.stock(item).quote());
-        setStocks(responses.map((response) => response[0]));
-      }
-    } catch (error) {
-      console.error('Error fetching stock data:', error);
-    }
-  };
 
-  const handleStockItemClick = (stock) => {
-    setSelectedStock(stock);
-  };
-
-  const renderStockItem = ({ item }) => {
-    const handleDelete = () => {
-      Alert.alert(
-        'Delete Stock',
-        'Are you sure you want to remove this stock from your watchlist?',
-        [
-          {
-            text: 'Cancel',
-            style: 'cancel',
-          },
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: () => removeFromWatchlist(item.symbol),
-          },
-        ],
-        { cancelable: true }
-      );
-    };
-
-    return (
-      <TouchableOpacity onPress={() => handleStockItemClick(item)}>
-        <View style={styles.stockItem}>
-          <Text style={styles.stockSymbol}>{item.symbol}</Text>
-          <TouchableOpacity style={styles.deleteButton} onPress={handleDelete}>
-            <Text style={styles.deleteButtonText}>Delete</Text>
-          </TouchableOpacity>
-        </View>
-      </TouchableOpacity>
-    );
-  };
+  const priceTargetData = data.map((item) => ({
+    date: new Date(item.publishedDate).toLocaleDateString(),
+    value: item.priceTarget,
+  }));
 
   return (
     <View style={styles.container}>
-      {stocks.length > 0 ? (
-        <FlatList
-          data={stocks}
-          keyExtractor={(item) => item.symbol}
-          renderItem={renderStockItem}
-          contentContainerStyle={styles.flatListContent}
-          ItemSeparatorComponent={() => <View style={styles.separator} />}
+      <View style={styles.chartContainer}>
+        <LineChart
+          data={{
+            labels: priceTargetData.map((item) => item.date),
+            datasets: [
+              {
+                data: priceTargetData.map((item) => item.value),
+              },
+            ],
+          }}
+          width={350}
+          height={200}
+          yAxisSuffix="$"
+          chartConfig={{
+            backgroundColor: '#000',
+            backgroundGradientFrom: '#000',
+            backgroundGradientTo: '#000',
+            decimalPlaces: 2,
+            color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+            style: {
+              borderRadius: 16,
+            },
+            propsForDots: {
+              r: '6',
+              strokeWidth: '2',
+              stroke: '#ffa726',
+            },
+          }}
+          bezier
+          style={styles.chart}
         />
-      ) : (
-        <Text style={styles.noWatchlistText}>No stocks in watchlist, use Search function to add stocks!</Text>
-      )}
+      </View>
+      <View style={styles.detailsContainer}>
+        <Text style={styles.title}>Price Targets</Text>
+        {data.map((item, index) => (
+          <View style={styles.row} key={index}>
+            <Text style={styles.label}>{item.analystCompany || 'Analyst'}:</Text>
+            <Text style={styles.value}>${item.priceTarget.toFixed(2)}</Text>
+          </View>
+        ))}
+      </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: scaleSize(16),
+    backgroundColor: '#000',
+    paddingHorizontal: 20,
+    paddingVertical: 30,
   },
-  flatListContent: {
-    paddingBottom: scaleSize(16),
+  chartContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
   },
-  stockItem: {
-    height: scaleSize(65),
+  chart: {
+    borderRadius: 16,
+  },
+  detailsContainer: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#fff',
+    marginBottom: 10,
+  },
+  row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingVertical: scaleSize(8),
-    backgroundColor: '#fff',
-    borderRadius: scaleSize(8),
-    borderWidth: scaleSize(1),
-    borderColor: '#ddd',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: scaleSize(2),
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: scaleSize(2),
-    elevation: scaleSize(2),
-    marginVertical: scaleSize(4),
+    marginBottom: 10,
   },
-  stockSymbol: {
-    fontSize: scaleSize(16),
-    fontWeight: 'bold',
-    marginLeft: scaleSize(20),
-  },
-  deleteButton: {
-    backgroundColor: '#fc3535',
-    height: scaleSize(35),
-    width: scaleSize(60),
-    padding: scaleSize(7),
-    borderRadius: scaleSize(4),
-    marginLeft: scaleSize(8),
-    marginRight: scaleSize(15),
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
-  deleteButtonText: {
+  label: {
+    fontSize: 16,
     color: '#fff',
-    fontSize: scaleSize(13),
+  },
+  value: {
+    fontSize: 16,
     fontWeight: 'bold',
-  },
-  separator: {
-    height: scaleSize(1),
-    backgroundColor: '#ccc',
-    marginVertical: scaleSize(8),
-  },
-  noWatchlistText: {
-    fontSize: scaleSize(15),
-    textAlign: 'center',
-    marginTop: scaleSize(20),
+    color: '#fff',
   },
 });
+
+export default StockScreen;

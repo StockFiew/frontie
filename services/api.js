@@ -1,13 +1,11 @@
 import * as SecureStore from 'expo-secure-store';
 
 const sendAuthenticatedRequest = (url, method = 'GET', body = null) => {
-  console.log(body)
   return SecureStore.getItemAsync('token')
     .then(token => {
       if (!token) {
         throw new Error('No token found');
       }
-      console.log(token);
       const headers = {
         'Content-Type': 'application/json',
         Authorization: "Bearer " + token,

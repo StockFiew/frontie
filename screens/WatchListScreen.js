@@ -3,16 +3,19 @@ import { StyleSheet, View, TextInput, Text, TouchableOpacity, FlatList } from 'r
 import { Ionicons } from '@expo/vector-icons';
 import fmp from "../services/fmp";
 import watchlist from "../services/watchlist";
-import { FontAwesome } from '@expo/vector-icons';
+import { Swipeable } from 'react-native-gesture-handler';
+import {useNavigation} from "@react-navigation/native";
 
-const WatchListScreen = () => {
+export function WatchListScreen() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [stockWatch, setStockWatch] = useState([]);
+  const navigation = useNavigation();
+  const swipeRef = React.useRef(null);
 
   useEffect(() => {
     // Load the stockWatch when the component mounts
-    loadWatchlist();
+    loadWatchlist().then(r => r);
   }, []);
 
   const loadWatchlist = () => {
@@ -32,53 +35,102 @@ const WatchListScreen = () => {
       })
       .catch((error) => {
         // handle errors here
+        console.log(error);
       });
   };
 
-
-
-
   const renderItem = ({ item }) => {
-    const isWatched = stockWatch.some(i => i.symbol == item.symbol)
+    const isWatched = stockWatch.some(i => i.symbol === item.symbol);
+    const handleDelete = () => {
+      watchlist.deleteItem({ symbol: item.symbol })
+        .then(() => {
+          loadWatchlist().then( r=> {
+            console.log(r);
+            swipeRef.current.close();
+          })
+        })
+        .catch((error) => {
+          // handle errors here
+          console.log(error);
+        });
+    };
+
+    const handleAdd = () => {
+      console.log(stockWatch);
+      if (stockWatch.some(i => i.symbol === item.symbol)) {
+        console.log('already watched');
+        swipeRef.current.close();
+      }
+      else {
+        watchlist.addItem({ symbol: item.symbol, stockExchange: item.stockExchange, name: item.name })
+          .then(() => {
+            swipeRef.current.close();
+            loadWatchlist().then(r => {
+              console.log(r);
+            })
+          })
+          .catch((error) => {
+            // handle errors here
+            console.log(error);
+          });
+      }
+    }
+
+    const renderRightActions = (progress, dragX) => {
+      const trans = dragX.interpolate({
+        inputRange: [0, 50, 100],
+        outputRange: [0, 0, 1],
+      });
+
+      return (
+        <TouchableOpacity onPress={handleDelete}>
+          <View style={styles.deleteButton}>
+            <Text style={styles.deleteButtonText}>Delete</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    };
+
+    const renderLeftActions = (progress, dragX) => {
+      const trans = dragX.interpolate({
+        inputRange: [0, 50, 100],
+        outputRange: [0, 0, 1],
+      })
+
+      return (
+        <TouchableOpacity onPress={handleAdd}>
+          <View style={styles.addButton}>
+            <Text style={styles.addButtonText}>Add</Text>
+          </View>
+        </TouchableOpacity>
+      );
+    }
+
     return (
-      <TouchableOpacity style={styles.item} onPress={() => handlePress(item)}>
-        <Text style={styles.symbol}>{item.symbol}</Text>
-        <Text style={styles.name}>{item.name}</Text>
-        <Text style={styles.exchange}>{item.stockExchange}</Text>
-        {isWatched && <Ionicons name="checkmark" size={24} color="#008000" />}
-      </TouchableOpacity>
-    );
+        <Swipeable ref={swipeRef} renderLeftActions={renderLeftActions} renderRightActions={renderRightActions}>
+          <TouchableOpacity style={styles.item} onPress={handlePress}>
+            <View style={styles.itemContent}>
+              <Text style={styles.symbol}>{item.symbol}</Text>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.exchange}>{item.stockExchange}</Text>
+            </View>
+            {isWatched && <Ionicons name="checkmark" size={24} color="#008000"/>}
+          </TouchableOpacity>
+        </Swipeable>
+    )
   };
 
-  const keyExtractor = (item) => item.symbol;
-
-
   const handleSearch = async () => {
-    fmp.search(query, 50, 'NASDAQ').then(
-      (response) => {
-        setSearchResults(response);
-      }
+    fmp.search(query, 50, 'NASDAQ')
+      .then((r) => setSearchResults(r)
     ).catch(err => {
       console.log(err);
     });
   };
 
   const handlePress = async (i) => {
-    // Handle the deletion logic here
-    const watch = stockWatch
-    const isWatched = watch.includes(i);
-    if (isWatched) {
-      watchlist.deleteItem(i)
-        .then(() => {
-          loadWatchlist();
-        });
-    } else {
-      watchlist.addItem({symbol: i.symbol, name: i.name, stockExchange: i.stockExchange})
-        .then(() => {
-          loadWatchlist();
-        })
-      return console.log(`Adding ${i.symbol}`);
-    }
+    // Navigate to the StockScreen with the selected stock symbol
+    navigation.navigate('Stocks', { symbol: i.symbol });
   };
 
   const handleQueryChange = (text) => {
@@ -88,11 +140,18 @@ const WatchListScreen = () => {
     }
   };
 
+  const handleKeyPress = ({ nativeEvent }) => {
+    if (nativeEvent.key === 'Enter') {
+      handleSearch();
+    }
+  };
+
+  const handleSearchTextClear = () => {
+    setQuery('')
+  }
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity style={styles.iconContainer}>
-        <FontAwesome name="user" size={24} color="black" />
-      </TouchableOpacity>
       <View style={styles.inputContainer}>
         <TextInput
           style={styles.input}
@@ -102,24 +161,51 @@ const WatchListScreen = () => {
           onChangeText={handleQueryChange}
           autoCapitalize="characters"
           onSubmitEditing={handleSearch}
+          onClearText={{handleSearchTextClear}}
+          returnKeyType="search"
+          onKeyPress={handleKeyPress}
+          clearButtonMode="always"
         />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Ionicons name="search" size={24} color="#FFF" />
-        </TouchableOpacity>
       </View>
       {searchResults.length > 0 && (
         <FlatList
           data={searchResults}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
+          keyExtractor={item => item.symbol}
           style={styles.list}
+          renderItem={( { item } ) => {
+            if (stockWatch.some(i => i.symbol === item.symbol)) {
+              return (
+                <TouchableOpacity style={styles.item} onPress={handlePress}>
+                  <View style={styles.itemContent}>
+                    <Text style={styles.symbol}>{item.symbol}</Text>
+                    <Text style={styles.name}>{item.name}</Text>
+                    <Text style={styles.exchange}>{item.stockExchange}</Text>
+                  </View>
+                  <Ionicons name="checkmark" size={24} color="#008000"/>
+                </TouchableOpacity>
+              )
+            } else {
+              return renderItem({item});
+            }
+          }}
         />
       )}
       {searchResults.length === 0 && (
         <FlatList
           data={stockWatch}
-          renderItem={renderItem}
-          keyExtractor={keyExtractor}
+          renderItem={( { item } ) => {
+            return (
+              <TouchableOpacity style={styles.item} onPress={handlePress}>
+                <View style={styles.itemContent}>
+                  <Text style={styles.symbol}>{item.symbol}</Text>
+                  <Text style={styles.name}>{item.name}</Text>
+                  <Text style={styles.exchange}>{item.stockExchange}</Text>
+                </View>
+                <Ionicons name="checkmark" size={24} color="#008000"/>
+              </TouchableOpacity>
+            )
+          }}
+          keyExtractor={item => item.symbol}
           style={styles.list}
         />
       )}
@@ -139,7 +225,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginHorizontal: 16,
     marginTop: 16,
     shadowColor: '#000',
     shadowOffset: {
@@ -157,16 +242,10 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     marginLeft: 12,
-  },
-  item: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: '#007AFF',
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    marginHorizontal: 16,
-    marginBottom: 16,
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -178,28 +257,64 @@ const styles = StyleSheet.create({
   },
   symbol: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
+    color: '#000',
   },
   name: {
     flex: 2,
     fontSize: 16,
-    marginLeft: 16,
+    color: '#000',
   },
   exchange: {
     flex: 1,
-    fontSize: 16,
-    marginLeft: 16,
+    fontSize: 14,
+    color: '#A9A9A9',
   },
   list: {
     flex: 1,
-    marginTop: 16,
+    marginHorizontal: 0,
+    marginTop: 10,
   },
-  iconContainer: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
+  item: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#FFFFFF',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#CCCCCC',
+  },
+  itemContent: {
+    flex: 1,
+    marginRight: 20,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 20,
+    height: '100%',
+    width: 80,
+  },
+  deleteButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
+  },
+  addButton: {
+    backgroundColor: '#3083ff',
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingRight: 20,
+    height: '100%',
+    width: 80,
+  },
+  addButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });
 
 export default WatchListScreen;
+
