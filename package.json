@@ -38,7 +38,8 @@
     "react-native-svg": "13.4.0",
     "react-native-swipeable": "^0.6.0",
     "react-native-web": "~0.18.11",
-    "react-redux": "^8.0.7"
+    "react-redux": "^8.0.7",
+    "expo-image-picker": "~14.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

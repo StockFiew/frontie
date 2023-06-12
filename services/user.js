@@ -15,13 +15,13 @@ function user() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({email, password}),
     })
       .then(response => response.json())
       .then(data => {
         if (!data.Error) {
-          const token = data.Token;
-          return SecureStore.setItemAsync('token', token).then(() => data.User);
+          const token = data.token;
+          return SecureStore.setItemAsync('token', token).then(() => data.payload);
         } else {
           throw Error(data.Message);
         }
@@ -37,7 +37,7 @@ function user() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ email, password }),
+      body: JSON.stringify({email, password}),
     })
       .then(response => response.json())
       .then(data => {
@@ -53,7 +53,18 @@ function user() {
         throw error;
       });
 
-  return { fetchUserData, updateUserProfile, register, login };
+  const upload = (image) =>
+    sendAuthenticatedRequest(`${API_URL}/users/profile/picture`, 'POST', image, "multipart/form-data")
+      .then(response => response.json())
+      .then(data => {
+        if (!data.Error) {
+          return data;
+        } else {
+          throw Error(data.Message);
+        }
+      });
+
+  return { fetchUserData, updateUserProfile, register, login, upload };
 }
 
 const api = { user };

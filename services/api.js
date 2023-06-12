@@ -1,19 +1,25 @@
 import * as SecureStore from 'expo-secure-store';
 
-const sendAuthenticatedRequest = (url, method = 'GET', body = null) => {
+const sendAuthenticatedRequest = (url, method = 'GET', body = null, ct = "application/json") => {
   return SecureStore.getItemAsync('token')
     .then(token => {
       if (!token) {
         throw new Error('No token found');
       }
       const headers = {
-        'Content-Type': 'application/json',
+        'Content-Type': ct,
         Authorization: "Bearer " + token,
       };
+
       const options = { method, headers };
       if (body) {
-        options.body = JSON.stringify(body);
+        if (ct === "multipart/form-data"){
+          options.body = body;
+        } else {
+          options.body = JSON.stringify(body);
+        }
       }
+      console.log(url)
       console.log(options)
       return fetch(url, options);
     })
