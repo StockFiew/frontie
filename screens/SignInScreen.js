@@ -13,11 +13,12 @@ import logo from '../assets/images/icon_trans.png'; // Relative path to the imag
 import { scaleSize } from '../constants/Layout';
 import api from '../services/user';
 
-export default function SignInScreen( {navigation, route} ) {
+export default function SignInScreen( {route} ) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const user = api.user();
+  const navigation = useNavigation();
 
   const onSignIn = () => {
     user.login(email, password)

@@ -4,22 +4,20 @@ import { useNavigation } from '@react-navigation/native';
 import api from '../services/user';
 import { scaleSize } from '../constants/Layout';
 
-export default function SignUpScreen() {
+export default function SignUpScreen({ route }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const userApi = api.user();
   const navigation = useNavigation();
 
-  const onSignUp = async () => {
+  const onSignUp = () => {
     try {
       // Signup logic starts here
       userApi.register(email, password)
         .then((user) => {
-          console.log('Registered user:', user);
-          console.log('User successfully signed up!');
           Alert.alert('Welcome to StockFiew!', 'Your sign up has been completed');
-          navigation.navigate('Home'); // Navigate to the 'SignIn' screen
+          route.params.handleLogin();
         });
     } catch (err) {
       console.log('Error signing up:', err);

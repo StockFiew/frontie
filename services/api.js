@@ -9,6 +9,7 @@ const sendAuthenticatedRequest = (url, method = 'GET', body = null, ct = "applic
       const headers = {
         'Content-Type': ct,
         Authorization: "Bearer " + token,
+        Accept: 'application/json',
       };
 
       const options = { method, headers };
@@ -19,8 +20,6 @@ const sendAuthenticatedRequest = (url, method = 'GET', body = null, ct = "applic
           options.body = JSON.stringify(body);
         }
       }
-      console.log(url)
-      console.log(options)
       return fetch(url, options);
     })
     .then(response => response.json())

@@ -22,6 +22,7 @@ const UserScreen = () => {
       setProfilePic(data.profilePic);
     });
   }, []);
+  const profileUri = `data:image/jpeg;base64,${profilePic}`
 
   useEffect(() => {
     setTempName(name);
@@ -108,7 +109,7 @@ const UserScreen = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.profilePicContainer}>
-          <Image source={{ uri: profilePic }} style={styles.profilePic} />
+          <Image source={ {url: profileUri} } style={styles.profilePic} />
           {editMode && (
             <TouchableOpacity onPress={handlePickImage} style={styles.editButton}>
               <Text style={styles.editButtonText}>Edit</Text>

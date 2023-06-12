@@ -23,15 +23,17 @@ export function WatchListScreen() {
     // ...
     return watchlist.getList()
       .then((results) => {
-        const mappedResults = results.map((res) => {
-          return {
-            symbol: res.symbol,
-            name: res.name,
-            stockExchange: res.stockExchange
-          };
-        });
-        setStockWatch(mappedResults);
-        return mappedResults;
+        if (results) {
+          const mappedResults = results.map((res) => {
+            return {
+              symbol: res.symbol,
+              name: res.name,
+              stockExchange: res.stockExchange
+            };
+          });
+          setStockWatch(mappedResults);
+          return mappedResults;
+        }
       })
       .catch((error) => {
         // handle errors here

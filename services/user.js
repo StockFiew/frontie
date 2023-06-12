@@ -55,7 +55,16 @@ function user() {
 
   const upload = (image) =>
     sendAuthenticatedRequest(`${API_URL}/users/profile/picture`, 'POST', image, "multipart/form-data")
-      .then(response => response.json())
+      .then(response => {
+        try {
+          console.log("NON-JSON RETURN")
+          return response.json()
+        }
+        catch {
+          console.log("JSON RETURN")
+          return response
+        }
+      })
       .then(data => {
         if (!data.Error) {
           return data;
