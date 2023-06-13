@@ -29,35 +29,34 @@ export function WatchListScreen() {
   }, []);
 
   const loadWatchlist = () => {
-    watchlist.getList()
+    watchlist
+      .getList()
       .then((results) => {
         if (results) {
           const symbols = results.map((res) => res.symbol);
-          return fmp.quote(symbols)
-            .then((quotes) => {
-              const filteredQuotes = quotes.filter((quote) =>
-                symbols.includes(quote.symbol)
-              );
-              const mappedResults = results.map((res) => {
-                const quote = filteredQuotes.find((q) => q.symbol === res.symbol);
-                return {
-                  symbol: res.symbol,
-                  name: res.name,
-                  stockExchange: res.exchange,
-                  price: quote ? quote.price : null,
-                  changePercent: quote ? quote.changesPercentage : null,
-                };
-              });
-              setStockWatch(mappedResults);
-              return mappedResults;
+          return fmp.quote(symbols).then((quotes) => {
+            const filteredQuotes = quotes.filter((quote) =>
+              symbols.includes(quote.symbol)
+            );
+            const mappedResults = results.map((res) => {
+              const quote = filteredQuotes.find((q) => q.symbol === res.symbol);
+              return {
+                symbol: res.symbol,
+                name: res.name,
+                stockExchange: res.exchange,
+                price: quote ? quote.price : null,
+                changePercent: quote ? quote.changesPercentage : null,
+              };
             });
+            setStockWatch(mappedResults);
+            return mappedResults;
+          });
         }
       })
       .catch((error) => {
         console.log(error);
       });
   };
-
 
   const renderItem = ({ item }) => {
     const isWatched = stockWatch.some((i) => i.symbol === item.symbol);
@@ -67,7 +66,7 @@ export function WatchListScreen() {
       watchlist
         .deleteItem({ symbol: item.symbol })
         .then(() => {
-          loadWatchlist()
+          loadWatchlist();
           swipeRef.current.close();
         })
         .catch((error) => {
@@ -84,7 +83,7 @@ export function WatchListScreen() {
           name: item.name,
         })
         .then(() => {
-          loadWatchlist()
+          loadWatchlist();
           swipeRef.current.close();
         })
         .catch((error) => {
@@ -163,20 +162,22 @@ export function WatchListScreen() {
             <View style={styles.itemContent}>
               <Text style={styles.symbol}> {item.symbol} </Text>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>
-                {price ? `$${price.toFixed(2)}` : '-'}
-              </Text>
-              <Text
-                style={[
-                  styles.changePercent,
-                  { color: item.changePercent >= 0 ? 'green' : 'red' },
-                ]}
-              >
-                {item.changePercent
-                  ? `${item.changePercent.toFixed(2)}%`
-                  : '-'}
-              </Text>
             </View>
+            <Text style={styles.price}>
+              {price ? `$${price.toFixed(2)}` : '-'}
+            </Text>
+
+            <Text
+              style={[
+                styles.changePercent,
+                { color: item.changePercent >= 0 ? 'green' : 'red' },
+              ]}
+            >
+              {item.changePercent ? `${item.changePercent.toFixed(2)}%` : '-'}
+            </Text>
+            {isWatched && (
+              <Ionicons name='checkmark-circle' color='green' size={20} />
+            )}
           </TouchableOpacity>
         </Swipeable>
       </View>
@@ -292,7 +293,7 @@ const styles = StyleSheet.create({
   },
   name: {
     flex: 2,
-    fontSize: scaleSize(13),
+    fontSize: scaleSize(12),
     color: '#000',
   },
   exchange: {
@@ -356,6 +357,18 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: scaleSize(15),
     fontWeight: '600',
+  },
+  price: {
+    flex: 0.65,
+    fontSize: scaleSize(15),
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  changePercent: {
+    flex: 0.5,
+    fontSize: scaleSize(15),
+    fontWeight: 'bold',
+    color: '#000',
   },
 });
 

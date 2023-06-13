@@ -12,7 +12,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import api from '../services/user';
 import { scaleSize } from '../constants/Layout';
-import * as SecureStore from "expo-secure-store";
+import * as SecureStore from 'expo-secure-store';
 
 const UserScreen = ({ route }) => {
   const [name, setName] = useState('');
@@ -237,8 +237,11 @@ const UserScreen = ({ route }) => {
               <Text style={styles.buttonText}>Edit</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={ route.params.handleLogout }>
-              <Text style={styles.buttonText}>Logout</Text>
+            <TouchableOpacity
+              style={styles.cancleButton}
+              onPress={route.params.handleLogout}
+            >
+              <Text style={styles.buttonText}>Sign out</Text>
             </TouchableOpacity>
           </View>
         )}
@@ -311,6 +314,7 @@ const styles = StyleSheet.create({
     paddingVertical: scaleSize(8),
     paddingHorizontal: scaleSize(10),
     marginHorizontal: scaleSize(50),
+    marginBottom: scaleSize(10),
   },
   cancleButton: {
     backgroundColor: '#807e7e',
@@ -318,6 +322,7 @@ const styles = StyleSheet.create({
     paddingVertical: scaleSize(8),
     paddingHorizontal: scaleSize(10),
     marginHorizontal: scaleSize(50),
+    marginBottom: scaleSize(10),
   },
   buttonText: {
     color: '#fff',
