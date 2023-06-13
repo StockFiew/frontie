@@ -10,7 +10,7 @@ const PriceTarget = ({ data, handlePriceTargetSelect, setIsModalVisible }) => {
         <Text style={styles.priceTargetAnalyst}>{item.analystName}</Text>
         <Text style={styles.priceTargetCompany}>{item.analystCompany}</Text>
         <Text style={styles.priceTargetPrice}>
-          Price Target: ${item.priceTarget.toFixed(2)}
+          Price Target: ${item.priceTarget}
         </Text>
         <Text style={styles.priceTargetDate}>
           Published Date: {new Date(item.publishedDate).toLocaleString()}
