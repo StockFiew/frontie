@@ -22,6 +22,7 @@ const News = ({ data, handleNewsPress }) => {
       </View>
     );
   }
+  console.log(data);
 
   return (
     <FlatList

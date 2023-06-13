@@ -71,11 +71,14 @@ const StockScreen = ({ route, navigation }) => {
       </View>
       <Tab.Navigator
         tabBarOptions={{
-          style: { elevation: 0, borderBottomWidth: 1, borderBottomColor: '#ccc' },
-          tabStyle: { backgroundColor: '#333' },
-          labelStyle: { fontSize: 16, fontWeight: 'bold' },
-          inactiveTintColor: '#ccc',
-          indicatorStyle: { backgroundColor: '#333' },
+          screenOptions: {
+            tabBarVisible: false ,
+            tabBarInactiveTintColor: '#ccc',
+            tabBarActiveTintColor: '#fff',
+            tabBarStyle: { backgroundColor: '#333' },
+            tabBarLabelStyle: { fontSize: 16, fontWeight: 'bold' },
+            style: { elevation: 0, borderBottomWidth: 1, borderBottomColor: '#ccc' },
+          },
         }}
       >
         <Tab.Screen name="News"
