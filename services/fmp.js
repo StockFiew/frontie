@@ -24,6 +24,16 @@ const price_target = (symbol) => {
     });
 }
 
+const quote = (symbols) => {
+  const url = `https://financialmodelingprep.com/api/v3/quote/${symbols.join(',')}?apikey=${FMP_API_SECRET}`
+  console.log(url);
+  return fetch(url)
+    .then((res) => res.json())
+    .catch((err) => {
+      console.error(err);
+      throw err;
+    });}
+
 
 const news = (symbols) => {
   const url = `https://financialmodelingprep.com/api/v3/stock_news?tickers=${symbols}&page=0&apikey=${FMP_API_SECRET}`;
@@ -40,6 +50,7 @@ const fmp = {
   api,
   news,
   price_target,
+  quote,
   search
 };
 

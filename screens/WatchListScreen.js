@@ -19,49 +19,56 @@ export function WatchListScreen() {
   const [query, setQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [stockWatch, setStockWatch] = useState([]);
+  const [stockPrices, setStockPrices] = useState([]);
   const navigation = useNavigation();
   const swipeRef = React.useRef(null);
 
   useEffect(() => {
     // Load the stockWatch when the component mounts
-    loadWatchlist().then((r) => r);
+    loadWatchlist();
   }, []);
 
   const loadWatchlist = () => {
-    // Load the stockWatch from storage or API
-    // ...
-    return watchlist
-      .getList()
+    watchlist.getList()
       .then((results) => {
         if (results) {
-          const mappedResults = results.map((res) => {
-            return {
-              symbol: res.symbol,
-              name: res.name,
-              stockExchange: res.stockExchange,
-            };
-          });
-          setStockWatch(mappedResults);
-          return mappedResults;
+          const symbols = results.map((res) => res.symbol);
+          return fmp.quote(symbols)
+            .then((quotes) => {
+              const filteredQuotes = quotes.filter((quote) =>
+                symbols.includes(quote.symbol)
+              );
+              const mappedResults = results.map((res) => {
+                const quote = filteredQuotes.find((q) => q.symbol === res.symbol);
+                return {
+                  symbol: res.symbol,
+                  name: res.name,
+                  stockExchange: res.exchange,
+                  price: quote ? quote.price : null,
+                  changePercent: quote ? quote.changesPercentage : null,
+                };
+              });
+              setStockWatch(mappedResults);
+              return mappedResults;
+            });
         }
       })
       .catch((error) => {
-        // handle errors here
         console.log(error);
       });
   };
 
+
   const renderItem = ({ item }) => {
     const isWatched = stockWatch.some((i) => i.symbol === item.symbol);
+    const price = item.price;
 
     const handleDelete = () => {
       watchlist
         .deleteItem({ symbol: item.symbol })
         .then(() => {
-          loadWatchlist().then((r) => {
-            console.log(r);
-            swipeRef.current.close();
-          });
+          loadWatchlist()
+          swipeRef.current.close();
         })
         .catch((error) => {
           // handle errors here
@@ -77,10 +84,8 @@ export function WatchListScreen() {
           name: item.name,
         })
         .then(() => {
-          loadWatchlist().then((r) => {
-            console.log(r);
-            swipeRef.current.close();
-          });
+          loadWatchlist()
+          swipeRef.current.close();
         })
         .catch((error) => {
           // handle errors here
@@ -156,13 +161,22 @@ export function WatchListScreen() {
             onPress={() => handlePress(item)}
           >
             <View style={styles.itemContent}>
-              <Text style={styles.symbol}>{item.symbol}</Text>
+              <Text style={styles.symbol}> {item.symbol} </Text>
               <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.exchange}>{item.stockExchange}</Text>
+              <Text style={styles.price}>
+                {price ? `$${price.toFixed(2)}` : '-'}
+              </Text>
+              <Text
+                style={[
+                  styles.changePercent,
+                  { color: item.changePercent >= 0 ? 'green' : 'red' },
+                ]}
+              >
+                {item.changePercent
+                  ? `${item.changePercent.toFixed(2)}%`
+                  : '-'}
+              </Text>
             </View>
-            {isWatched && (
-              <Ionicons name='checkmark' size={24} color='#008000' />
-            )}
           </TouchableOpacity>
         </Swipeable>
       </View>

@@ -17,18 +17,22 @@ import * as WebBrowser from 'expo-web-browser';
 import Charts from '../components/Charts';
 import News from '../components/News';
 import TradingView from "../components/TradingView";
+import StockInfo from "../components/StockInfo";
 
 const Tab = createMaterialTopTabNavigator();
 
 const StockScreen = ({ route, navigation }) => {
-  const [data, setData] = useState([]);
-  const [news, setNews] = useState([]);
+  const [stockInfo, setStockInfo] = useState({});
   const symbol = route.params.symbol;
 
-  if (data['Error Message'] !== undefined) {
-    Alert.alert('Error Message', `${data['Error Message']} \nBecause api too expensive 3;`);
-    navigation.goBack();
-  }
+  useEffect(() => {
+    fmp.quote([symbol]).then((res) => {
+      setStockInfo(res[0]);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }, [symbol]);
+
 
   return (
     <View style={styles.container}>
@@ -41,6 +45,7 @@ const StockScreen = ({ route, navigation }) => {
           <Ionicons name="ellipsis-vertical" size={24} color="#fff" />
         </TouchableOpacity>
       </View>
+      <StockInfo stockInfo={stockInfo} />
       <Tab.Navigator
         tabBarOptions={{
           screenOptions: {
