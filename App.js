@@ -7,6 +7,7 @@ import { StocksProvider } from './contexts/StocksContext';
 import 'react-native-gesture-handler';
 import SignInScreen from './screens/SignInScreen';
 import SignUpScreen from './screens/SignUpScreen';
+import * as SecureStore from "expo-secure-store";
 
 const Stack = createStackNavigator();
 
@@ -18,7 +19,9 @@ export default function App(props) {
   }
 
   function handleLogout() {
-    setIsLoggedIn(false);
+    SecureStore.deleteItemAsync("token").then(r => {
+      setIsLoggedIn(false);
+    })
   }
 
   return (
@@ -32,6 +35,7 @@ export default function App(props) {
                 name='Home'
                 component={BottomTabNavigator}
                 options={{ headerShown: false }}
+                initialParams={{ handleLogout }}
               />
             ) : (
               <>

@@ -12,8 +12,9 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import api from '../services/user';
 import { scaleSize } from '../constants/Layout';
+import * as SecureStore from "expo-secure-store";
 
-const UserScreen = () => {
+const UserScreen = ({ route }) => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
@@ -231,9 +232,15 @@ const UserScreen = () => {
             </TouchableOpacity>
           </View>
         ) : (
-          <TouchableOpacity style={styles.button} onPress={handleSave}>
-            <Text style={styles.buttonText}>Edit</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+              <Text style={styles.buttonText}>Edit</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity style={styles.button} onPress={ route.params.handleLogout }>
+              <Text style={styles.buttonText}>Logout</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </View>
     </View>
@@ -297,13 +304,6 @@ const styles = StyleSheet.create({
     fontSize: scaleSize(15),
     fontWeight: 'bold',
     textTransform: 'uppercase',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    marginTop: scaleSize(20),
   },
   button: {
     backgroundColor: '#8A2BE2',

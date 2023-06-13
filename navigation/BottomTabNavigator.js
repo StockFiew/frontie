@@ -15,6 +15,8 @@ export default function BottomTabNavigator({ navigation, route }) {
     navigation.setOptions({ headerTitle: getHeaderTitle(route) });
   }, [navigation, route]);
 
+  const handleLogout = route.params.handleLogout;
+
   return (
     <BottomTab.Navigator
       initialRouteName={INITIAL_ROUTE_NAME}
@@ -45,6 +47,7 @@ export default function BottomTabNavigator({ navigation, route }) {
             <TabBarIcon focused={focused} name='md-body' />
           ),
         }}
+        initialParams={{ handleLogout }}
       />
     </BottomTab.Navigator>  );
 }
