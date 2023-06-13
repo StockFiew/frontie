@@ -7,13 +7,14 @@ import {
   View,
   StyleSheet,
   Image,
+  TouchableOpacity,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import logo from '../assets/images/icon_trans.png'; // Relative path to the image
 import { scaleSize } from '../constants/Layout';
 import api from '../services/user';
 
-export default function SignInScreen( {route} ) {
+export default function SignInScreen({ route }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -21,7 +22,8 @@ export default function SignInScreen( {route} ) {
   const navigation = useNavigation();
 
   const onSignIn = () => {
-    user.login(email, password)
+    user
+      .login(email, password)
       .then((user) => {
         console.log('Logged in user:', user);
         console.log('User successfully signed in!');
@@ -30,7 +32,7 @@ export default function SignInScreen( {route} ) {
       })
       .catch((err) => {
         console.log('Error signing in:', err);
-      })
+      });
   };
 
   const onSignUp = () => {
@@ -57,13 +59,16 @@ export default function SignInScreen( {route} ) {
           placeholderTextColor='#F2F2F2'
           style={styles.input}
         />
-
         <View style={{ marginVertical: 5 }}>
-          <Button title='Sign in' onPress={onSignIn} color='#8A2BE2' />
+          <TouchableOpacity onPress={onSignIn} style={styles.button}>
+            <Text style={styles.buttonText}>Sign in</Text>
+          </TouchableOpacity>
         </View>
         <Text style={styles.text}>If you are not a member yet</Text>
         <View style={{ marginVertical: 13 }}>
-          <Button title='Sign up here' onPress={onSignUp} color='#525050' />
+          <TouchableOpacity onPress={onSignUp} style={styles.button}>
+            <Text style={styles.buttonText}>Sign up here</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -111,6 +116,21 @@ const styles = StyleSheet.create({
     color: '#525050',
     fontSize: scaleSize(14),
     marginTop: scaleSize(10),
-    marginBottom: scaleSize(-7),
+    marginBottom: scaleSize(-10),
+  },
+
+  button: {
+    width: scaleSize(150),
+    height: scaleSize(30),
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'transparent',
+    borderRadius: scaleSize(8),
+    marginTop: scaleSize(-3),
+  },
+  buttonText: {
+    fontSize: scaleSize(16),
+    fontWeight: 'bold',
+    color: '#8A2BE2',
   },
 });

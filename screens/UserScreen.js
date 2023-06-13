@@ -157,7 +157,6 @@ const UserScreen = () => {
             <Text style={[styles.text, { textAlign: 'center' }]}>{name}</Text>
           </View>
         )}
-        {/* <Text style={styles.label}>Email:</Text> */}
         {editMode ? (
           <TextInput
             style={styles.input}
@@ -257,8 +256,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#333',
     margin: scaleSize(20),
-    // marginTop: scaleSize(20),
-    // marginBottom: scaleSize(20),
   },
   profilePicContainer: {
     position: 'relative',
@@ -266,8 +263,7 @@ const styles = StyleSheet.create({
     height: scaleSize(120),
     borderRadius: scaleSize(60),
     overflow: 'hidden',
-    // borderWidth: 1,
-    // borderColor: '#bdbdbd',
+
     backgroundColor: '#d9d9d9',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -329,25 +325,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
   },
-
-  doneButton: {
-    marginTop: scaleSize(20),
-    backgroundColor: '#007aff',
-    borderRadius: scaleSize(10),
-    paddingVertical: scaleSize(10),
-    paddingHorizontal: scaleSize(20),
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.5,
-    shadowRadius: 3,
-    elevation: 3,
-  },
-  doneButtonText: {
-    color: '#fff',
-    fontSize: scaleSize(16),
-    fontWeight: 'bold',
-    textTransform: 'uppercase',
-  },
   label: {
     fontSize: scaleSize(16),
     fontWeight: '500',
@@ -356,7 +333,7 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   text: {
-    fontSize: scaleSize(30),
+    fontSize: scaleSize(25),
     color: '#333',
     marginBottom: scaleSize(20),
     textAlign: 'center',
@@ -370,9 +347,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     paddingHorizontal: scaleSize(10),
-    marginVertical: scaleSize(3),
+    marginVertical: scaleSize(1),
+    paddingVertical: scaleSize(8),
     borderRadius: scaleSize(5),
-    fontSize: scaleSize(16), // Adjust the font size as needed
+    fontSize: scaleSize(13),
+    paddingBottom: scaleSize(-20),
   },
   buttonContainer: {
     flexDirection: 'row',
