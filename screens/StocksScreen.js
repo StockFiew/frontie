@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -7,7 +7,7 @@ import {
   StyleSheet,
   ScrollView,
   ActivityIndicator,
-  Image,
+  Image, Alert,
 } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,20 +20,19 @@ const Tab = createMaterialTopTabNavigator();
 
 const StockScreen = ({ route, navigation }) => {
   const [data, setData] = useState([]);
+  const [news, setNews] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedPriceTarget, setSelectedPriceTarget] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
 
   useEffect(() => {
-    Promise.all([
-      fmp.price_target(route.params.symbol),
-      fmp.news(route.params.symbol),
-    ]).then(([priceTargetData, newsData]) => {
-      console.log(priceTargetData);
-      console.log(newsData);
-      setData([...priceTargetData, ...newsData]);
-      setIsLoading(false);
+    fmp.price_target(route.params.symbol).then((data) => {
+      setData(data)
     });
+    fmp.news(route.params.symbol).then((data) => {
+      setNews(data)
+    });
+    setIsLoading(false);
   }, []);
 
   const handlePriceTargetSelect = (priceTarget) => {
@@ -56,6 +55,10 @@ const StockScreen = ({ route, navigation }) => {
         <ActivityIndicator size="large" color="#fff" />
       </View>
     );
+  }
+  else if (data['Error Message'] !== undefined) {
+    Alert.alert('Error Message', `${data['Error Message']} \nBecause api too expensive 3;`);
+    navigation.goBack();
   }
 
   return (
@@ -81,13 +84,17 @@ const StockScreen = ({ route, navigation }) => {
           },
         }}
       >
-        <Tab.Screen name="News"
-                    component={News}
-                    initialParams={{data , handleNewsPress }}
+        <Tab.Screen
+          name="News"
+          options={{ title: 'News' }}
+          component={News}
+          initialParams={{ news, handleNewsPress }}
         />
-        <Tab.Screen name="Price Targets"
-                    component={PriceTarget}
-                    initialParams={{data , handlePriceTargetSelect, setIsModalVisible }}
+        <Tab.Screen
+          name="Price Targets"
+          options={{ title: 'Price Targets' }}
+          component={PriceTarget}
+          initialParams={{ data, handlePriceTargetSelect, setIsModalVisible }}
         />
       </Tab.Navigator>
       <Modal visible={isModalVisible} animationType="slide">
@@ -102,17 +109,6 @@ const StockScreen = ({ route, navigation }) => {
               </Text>
               <Text style={styles.modalText}>
                 Price Target: ${selectedPriceTarget.priceTarget.toFixed(2)}
-              </Text>
-              <Text style={styles.modalText}>
-                Adj. Price Target: ${selectedPriceTarget.adjPriceTarget.toFixed(2)}
-              </Text>
-              <Text style={styles.modalText}>
-                Price When Posted: ${selectedPriceTarget.priceWhenPosted.toFixed(2)}
-              </Text>
-              <Text style={styles.modalText}>News Publisher: {selectedPriceTarget.site}</Text>
-              <Text style={styles.modalText}>News Title: {selectedPriceTarget.title}</Text>
-              <Text style={styles.modalText}>
-                Published Date: {new Date(selectedPriceTarget.publishedDate).toLocaleString()}
               </Text>
             </View>
           )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Image, TouchableOpacity, Text, StyleSheet, TextInput, Button } from 'react-native';
+import {View, Image, TouchableOpacity, Text, StyleSheet, TextInput, Button, ActivityIndicator} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../services/user';
 
@@ -9,9 +9,10 @@ const UserScreen = () => {
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [editMode, setEditMode] = useState(false);
-  const [tempName, setTempName] = useState('');
-  const [tempEmail, setTempEmail] = useState('');
+  const [tempName, setTempName] = useState(() => name);
+  const [tempEmail, setTempEmail] = useState(() => email);
   const [profilePic, setProfilePic] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
   const userApi = api.user();
 
   useEffect(() => {
@@ -20,14 +21,22 @@ const UserScreen = () => {
       setName(data.name);
       setEmail(data.email);
       setProfilePic(data.profilePic);
+      setTempName(data.name);
+      setTempEmail(data.email);
+      setIsLoading(false);
     });
   }, []);
-  const profileUri = `data:image/jpeg;base64,${profilePic}`
 
-  useEffect(() => {
-    setTempName(name);
-    setTempEmail(email);
-  }, [name, email]);
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#fff" />
+      </View>
+    );
+  }
+
+
+  const profileUri = `data:image/jpeg;base64,${profilePic}`
 
   const handleNameChange = (text) => {
     setTempName(text);
@@ -74,8 +83,6 @@ const UserScreen = () => {
         console.error(error);
       });
   };
-
-
 
   const handleSave = () => {
     if (editMode) {
@@ -275,6 +282,12 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     width: '100%',
     marginTop: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000',
   },
 });
 

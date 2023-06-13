@@ -26,6 +26,7 @@ const PriceTarget = ({ data, handlePriceTargetSelect, setIsModalVisible }) => {
       </View>
     );
   }
+  console.log(data)
   return (
     <FlatList
       data={data}
