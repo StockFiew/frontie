@@ -1,13 +1,5 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-} from 'react-native';
-import { scaleSize } from '../constants/Layout';
-
+import { View, Text, TouchableOpacity, StyleSheet, FlatList } from 'react-native';
 const PriceTarget = ({ data, handlePriceTargetSelect, setIsModalVisible }) => {
   const renderItem = ({ item }) => (
     <TouchableOpacity
@@ -34,7 +26,7 @@ const PriceTarget = ({ data, handlePriceTargetSelect, setIsModalVisible }) => {
       </View>
     );
   }
-  console.log(data);
+  console.log(data)
   return (
     <FlatList
       data={data}
@@ -44,41 +36,40 @@ const PriceTarget = ({ data, handlePriceTargetSelect, setIsModalVisible }) => {
     />
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
-    padding: scaleSize(20),
+    padding: 20,
   },
   priceTargetItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: scaleSize(20),
-    borderBottomWidth: scaleSize(1),
+    marginBottom: 20,
+    borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    paddingBottom: scaleSize(20),
+    paddingBottom: 20,
   },
   priceTargetTextContainer: {
     flex: 1,
   },
   priceTargetAnalyst: {
-    fontSize: scaleSize(18),
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: scaleSize(10),
+    marginBottom: 10,
     color: '#fff',
   },
   priceTargetCompany: {
-    fontSize: scaleSize(14),
+    fontSize: 14,
     color: '#ccc',
-    marginBottom: scaleSize(10),
+    marginBottom: 10,
   },
   priceTargetPrice: {
-    fontSize: scaleSize(16),
+    fontSize: 16,
     fontWeight: 'bold',
     color: '#fff',
   },
   priceTargetDate: {
-    fontSize: scaleSize(12),
+    fontSize: 12,
     color: '#ccc',
   },
   loadingContainer: {
@@ -88,5 +79,4 @@ const styles = StyleSheet.create({
     backgroundColor: '#000',
   },
 });
-
 export default PriceTarget;

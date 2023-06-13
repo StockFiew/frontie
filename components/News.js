@@ -1,27 +1,14 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Image,
-  FlatList,
-} from 'react-native';
-import { scaleSize } from '../constants/Layout';
+import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
 
 const News = ({ data, handleNewsPress }) => {
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.newsItem}
-      onPress={() => handleNewsPress(item.url)}
-    >
+    <TouchableOpacity style={styles.newsItem} onPress={() => handleNewsPress(item.url)}>
       <Image source={{ uri: item.image }} style={styles.newsImage} />
       <View style={styles.newsTextContainer}>
         <Text style={styles.newsTitle}>{item.title}</Text>
         <Text style={styles.newsDescription}>{item.text}</Text>
-        <Text style={styles.newsDate}>
-          {new Date(item.publishedDate).toLocaleString()}
-        </Text>
+        <Text style={styles.newsDate}>{new Date(item.publishedDate).toLocaleString()}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -49,37 +36,37 @@ const News = ({ data, handleNewsPress }) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#000',
-    padding: scaleSize(20),
+    padding: 20,
   },
   newsItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: scaleSize(20),
-    borderBottomWidth: scaleSize(1),
+    marginBottom: 20,
+    borderBottomWidth: 1,
     borderBottomColor: '#ccc',
-    paddingBottom: scaleSize(20),
+    paddingBottom: 20,
   },
   newsImage: {
-    width: scaleSize(100),
-    height: scaleSize(100),
-    marginRight: scaleSize(20),
+    width: 100,
+    height: 100,
+    marginRight: 20,
   },
   newsTextContainer: {
     flex: 1,
   },
   newsTitle: {
-    fontSize: scaleSize(18),
+    fontSize: 18,
     fontWeight: 'bold',
-    marginBottom: scaleSize(10),
+    marginBottom: 10,
     color: '#fff',
   },
   newsDescription: {
-    fontSize: scaleSize(14),
+    fontSize: 14,
     color: '#ccc',
-    marginBottom: scaleSize(10),
+    marginBottom: 10,
   },
   newsDate: {
-    fontSize: scaleSize(12),
+    fontSize: 12,
     color: '#ccc',
   },
   loadingContainer: {
