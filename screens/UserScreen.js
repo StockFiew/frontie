@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import {View, Image, TouchableOpacity, Text, StyleSheet, TextInput, Button, ActivityIndicator} from 'react-native';
+import {
+  View,
+  Image,
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  TextInput,
+  Button,
+  ActivityIndicator,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import api from '../services/user';
+import { scaleSize } from '../constants/Layout';
 
 const UserScreen = () => {
   const [name, setName] = useState('');
@@ -30,13 +40,12 @@ const UserScreen = () => {
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#fff" />
+        <ActivityIndicator size='large' color='#fff' />
       </View>
     );
   }
 
-
-  const profileUri = `data:image/jpeg;base64,${profilePic}`
+  const profileUri = `data:image/jpeg;base64,${profilePic}`;
 
   const handleNameChange = (text) => {
     setTempName(text);
@@ -67,9 +76,10 @@ const UserScreen = () => {
           formData.append('picture', {
             uri: result.assets[0].uri,
             type: 'image/jpeg',
-            name: result.assets[0].fileName ?? 'profile.jpg'
+            name: result.assets[0].fileName ?? 'profile.jpg',
           });
-          userApi.upload(formData)
+          userApi
+            .upload(formData)
             .then((response) => {
               setProfilePic(result.uri);
               console.log(response);
@@ -87,18 +97,20 @@ const UserScreen = () => {
   const handleSave = () => {
     if (editMode) {
       // Replace this with your own API call to update user profile
-      userApi.updateUserProfile({
-        name: tempName,
-        email: tempEmail,
-        oldPassword: currentPassword,
-        newPassword: newPassword
-      }).then((data) => {
-        console.log('User info updated successfully!');
-        setName(tempName);
-        setEmail(tempEmail);
-        setEditMode(false);
-        console.log(data);
-      });
+      userApi
+        .updateUserProfile({
+          name: tempName,
+          email: tempEmail,
+          oldPassword: currentPassword,
+          newPassword: newPassword,
+        })
+        .then((data) => {
+          console.log('User info updated successfully!');
+          setName(tempName);
+          setEmail(tempEmail);
+          setEditMode(false);
+          console.log(data);
+        });
     } else {
       setEditMode(true);
     }
@@ -116,36 +128,47 @@ const UserScreen = () => {
     <View style={styles.container}>
       <View style={styles.content}>
         <View style={styles.profilePicContainer}>
-          <Image source={ {url: profileUri} } style={styles.profilePic} />
+          <Image source={{ url: profileUri }} style={styles.profilePic} />
+        </View>
+        <View>
           {editMode && (
-            <TouchableOpacity onPress={handlePickImage} style={styles.editButton}>
-              <Text style={styles.editButtonText}>Edit</Text>
+            <TouchableOpacity
+              onPress={handlePickImage}
+              style={styles.picEditButton}
+            >
+              <Text style={styles.picEditButtonText}>Edit</Text>
             </TouchableOpacity>
           )}
         </View>
+
         <Text style={styles.title}>Hi, my name is</Text>
-        <Text style={styles.label}>Name:</Text>
+
         {editMode ? (
           <TextInput
             style={styles.input}
-            placeholder="Name"
+            placeholder='Name'
+            placeholderTextColor={'#949292'}
             value={tempName}
             onChangeText={handleNameChange}
           />
         ) : (
-          <Text style={styles.text}>{name}</Text>
+          <View>
+            <Text style={[styles.label, { textAlign: 'center' }]}>Name:</Text>
+            <Text style={[styles.text, { textAlign: 'center' }]}>{name}</Text>
+          </View>
         )}
-        <Text style={styles.label}>Email:</Text>
+        {/* <Text style={styles.label}>Email:</Text> */}
         {editMode ? (
           <TextInput
             style={styles.input}
-            placeholder="Email"
+            placeholder='Email'
+            placeholderTextColor={'#949292'}
             value={tempEmail}
             onChangeText={handleEmailChange}
-            keyboardType="email-address"
-            textContentType="emailAddress"
-            autoCompleteType="email"
-            autoCapitalize="none"
+            keyboardType='email-address'
+            textContentType='emailAddress'
+            autoCompleteType='email'
+            autoCapitalize='none'
             autoCorrect={false}
             onBlur={() => {
               if (!email.includes('@')) {
@@ -154,31 +177,42 @@ const UserScreen = () => {
             }}
           />
         ) : (
-          <Text style={styles.text}>{email}</Text>
+          <View>
+            <Text style={[styles.label, { textAlign: 'center' }]}>Email:</Text>
+            <Text style={[styles.text, { textAlign: 'center' }]}>{email}</Text>
+          </View>
         )}
         {editMode && (
           <>
             <TextInput
               style={styles.input}
-              placeholder="Current Password"
+              placeholder='Current Password'
+              placeholderTextColor={'#949292'}
               value={currentPassword}
               onChangeText={handleCurrentPasswordChange}
               secureTextEntry
             />
             <TextInput
               style={styles.input}
-              placeholder="New Password"
+              placeholder='New Password'
+              placeholderTextColor={'#949292'}
               value={newPassword}
               onChangeText={handleNewPasswordChange}
               secureTextEntry
-              textContentType="newPassword"
-              autoCompleteType="password"
-              autoCapitalize="none"
+              textContentType='newPassword'
+              autoCompleteType='password'
+              autoCapitalize='none'
               autoCorrect={false}
               maxLength={100}
               onBlur={() => {
-                if (newPassword.length < 8 || !/[A-Z]/.test(newPassword) || !/[^A-Za-z0-9]/.test(newPassword)) {
-                  alert('Password must be at least 8 characters long and contain a capital letter and a special character');
+                if (
+                  newPassword.length < 8 ||
+                  !/[A-Z]/.test(newPassword) ||
+                  !/[^A-Za-z0-9]/.test(newPassword)
+                ) {
+                  alert(
+                    'Password must be at least 8 characters long and contain a capital letter and a special character'
+                  );
                 }
               }}
             />
@@ -186,11 +220,21 @@ const UserScreen = () => {
         )}
         {editMode ? (
           <View style={styles.buttonContainer}>
-            <Button title="Save" onPress={handleSave} />
-            <Button title="Cancel" onPress={handleCancel} color="#ff3b30" />
+            <TouchableOpacity style={styles.button} onPress={handleSave}>
+              <Text style={styles.buttonText}>Save</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={styles.cancleButton}
+              onPress={handleCancel}
+            >
+              <Text style={styles.buttonText}>Cancel</Text>
+            </TouchableOpacity>
           </View>
         ) : (
-          <Button title="Edit" onPress={handleSave} />
+          <TouchableOpacity style={styles.button} onPress={handleSave}>
+            <Text style={styles.buttonText}>Edit</Text>
+          </TouchableOpacity>
         )}
       </View>
     </View>
@@ -206,88 +250,142 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: scaleSize(20),
   },
   title: {
-    fontSize: 28,
-    fontWeight: '600',
+    fontSize: scaleSize(28),
+    fontWeight: 'bold',
     color: '#333',
-    marginBottom: 20,
+    margin: scaleSize(20),
+    // marginTop: scaleSize(20),
+    // marginBottom: scaleSize(20),
   },
   profilePicContainer: {
     position: 'relative',
-    width: 120,
-    height: 120,
-    borderRadius: 60,
+    width: scaleSize(120),
+    height: scaleSize(120),
+    borderRadius: scaleSize(60),
     overflow: 'hidden',
+    // borderWidth: 1,
+    // borderColor: '#bdbdbd',
+    backgroundColor: '#d9d9d9',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 5,
+    elevation: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   profilePic: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-  editButton: {
+  picEditButton: {
     position: 'absolute',
-    bottom: 0,
-    right: 0,
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#007aff',
-    justifyContent: 'center',
-    alignItems: 'center',
+    bottom: scaleSize(5),
+    right: scaleSize(-24),
+    width: scaleSize(40),
+    height: scaleSize(30),
+    borderRadius: scaleSize(15),
     zIndex: 1,
+    shadowColor: '#000',
+    shadowOffset: { width: 1, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 3,
   },
-  editButtonText: {
+  picEditButtonText: {
     color: '#fff',
-    fontSize: 12,
+    fontSize: scaleSize(15),
     fontWeight: 'bold',
+    textTransform: 'uppercase',
   },
+  buttonContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    marginTop: scaleSize(20),
+  },
+  button: {
+    backgroundColor: '#8A2BE2',
+    borderRadius: scaleSize(10),
+    paddingVertical: scaleSize(8),
+    paddingHorizontal: scaleSize(10),
+    marginHorizontal: scaleSize(50),
+  },
+  cancleButton: {
+    backgroundColor: '#807e7e',
+    borderRadius: scaleSize(10),
+    paddingVertical: scaleSize(8),
+    paddingHorizontal: scaleSize(10),
+    marginHorizontal: scaleSize(50),
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: scaleSize(14),
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+
   doneButton: {
-    marginTop: 20,
+    marginTop: scaleSize(20),
     backgroundColor: '#007aff',
-    borderRadius: 10,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    borderRadius: scaleSize(10),
+    paddingVertical: scaleSize(10),
+    paddingHorizontal: scaleSize(20),
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.5,
+    shadowRadius: 3,
+    elevation: 3,
   },
   doneButtonText: {
     color: '#fff',
-    fontSize: 16,
+    fontSize: scaleSize(16),
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  label: {
+    fontSize: scaleSize(16),
+    fontWeight: '500',
+    color: '#333',
+    marginTop: scaleSize(20),
+    textTransform: 'uppercase',
+  },
+  text: {
+    fontSize: scaleSize(30),
+    color: '#333',
+    marginBottom: scaleSize(20),
+    textAlign: 'center',
     fontWeight: 'bold',
   },
 
-  label: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#333',
-    marginTop: 20,
-  },
-  text: {
-    fontSize: 16,
-    color: '#333',
-    marginBottom: 20,
-  },
   input: {
-    width: '100%',
-    height: 40,
-    borderWidth: 1,
-    borderColor: '#ccc',
-    backgroundColor: '#fff',
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
+    width: '70%',
+    height: scaleSize(40),
+    backgroundColor: 'transparent',
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingHorizontal: scaleSize(10),
+    marginVertical: scaleSize(3),
+    borderRadius: scaleSize(5),
+    fontSize: scaleSize(16), // Adjust the font size as needed
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     width: '100%',
-    marginTop: 20,
+    marginTop: scaleSize(20),
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#000',
+    opacity: 0.8,
   },
 });
 
