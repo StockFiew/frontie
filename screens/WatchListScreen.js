@@ -253,7 +253,6 @@ const styles = StyleSheet.create({
     borderRadius: scaleSize(8),
     paddingHorizontal: scaleSize(10),
     paddingVertical: scaleSize(12),
-    marginTop: scaleSize(16),
     borderBottomWidth: 1,
     borderBottomColor: '#ccc',
     paddingBottom: scaleSize(0),
