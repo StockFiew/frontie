@@ -1,85 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { View, ActivityIndicator, Dimensions } from 'react-native';
-import WebView from 'react-native-webview';
+import React, { useState, useEffect, useMemo } from 'react';
+import { View, ActivityIndicator, Dimensions, Text } from 'react-native';
+import { LineChart } from 'react-native-svg-charts';
 import alpha from '../services/alpha';
 
-const Chart = ({ route }) => {
+const Charts = ({ route }) => {
   const { symbol } = route.params;
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const interval = '15min';
 
   useEffect(() => {
-    alpha.time_series(symbol).then((data) => {
-      setData(data);
-      setIsLoading(false);
-    });
+    alpha.time_series(symbol, interval)
+      .then(response => {
+        setData(response);
+      })
+      .catch(error => {
+        console.log(error);
+      });
+    setIsLoading(false);
   }, [symbol]);
 
-  const chartOptions = {
-    chart: {
-      type: 'candlestick',
-      height: 350,
-    },
-    title: {
-      text: `${symbol} Candlestick Chart`,
-      align: 'left',
-    },
-    xaxis: {
-      type: 'datetime',
-    },
-    yaxis: {
-      tooltip: {
-        enabled: true,
-      },
-    },
-    tooltip: {
-      x: {
-        format: 'dd MMM yyyy HH:mm:ss',
-      },
-    },
-    series: [
-      {
-        data: data
-          ? Object.entries(data['Time Series (5min)'])
-            .map(([date, values]) => ({
-              x: new Date(date).getTime(),
-              y: [parseFloat(values['1. open']), parseFloat(values['2. high']), parseFloat(values['3. low']), parseFloat(values['4. close'])],
-            }))
-            .reverse()
-          : [],
-      },
-    ],
-  };
+  const chartData = useMemo(() => {
+    if (!data) {
+      return null;
+    }
 
+    const timeSeries = data[`Time Series (${interval})`];
+    const labels = Object.keys(timeSeries).reverse();
+    const dataPoints = labels.map(label => parseFloat(timeSeries[label]['4. close']));
+    console.log(dataPoints);
 
-  const chartHtml = `
-    <html>
-      <head>
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts@3.41.0/dist/apexcharts.min.js"></script>
-      </head>
-      <body>
-        <div id="chart"></div>
-        <script>
-          var chart = new ApexCharts(document.querySelector("#chart"), ${JSON.stringify(chartOptions)});
-          chart.render();
-        </script>
-      </body>
-    </html>
-  `;
+    return {
+      labels,
+      datasets: [
+        {
+          data: dataPoints,
+        },
+      ],
+    };
+  }, [data]);
 
-  console.log("I'm Here");
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (!data) {
+    return <Text>Error: Could not fetch data. Please try again later.</Text>;
+  }
 
   return (
     <View style={{ flex: 1 }}>
-      {isLoading ? (
-        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-          <ActivityIndicator size="large" color="#0000ff" />
-        </View>
-      ) : (
-        <WebView source={{ html: chartHtml }} style={{ height: 350 }} />
-      )}
+      <View style={{ height: 220 }}>
+        <LineChart
+          style={{ flex: 1 }}
+          data={chartData.datasets[0].data}
+          contentInset={{ top: 10, bottom: 10 }}
+          svg={{ stroke: 'rgb(134, 65, 244)' }}
+        />
+      </View>
+      <View style={{ flex: 1 }}>
+        <Text>Test</Text>
+      </View>
     </View>
   );
 };
 
-export default Chart;
+export default Charts;

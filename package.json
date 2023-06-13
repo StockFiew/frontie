@@ -32,7 +32,6 @@
     "financialmodelingprep": "github:alphaboard-io/fmpcloud",
     "node-fetch": "^3.3.1",
     "react": "18.2.0",
-    "react-apexcharts": "^1.4.0",
     "react-dom": "18.2.0",
     "react-native": "0.71.8",
     "react-native-async-storage": "^0.0.1",
@@ -40,14 +39,15 @@
     "react-native-dotenv": "^3.4.8",
     "react-native-gesture-handler": "~2.9.0",
     "react-native-screens": "~3.20.0",
-    "react-native-svg": "13.4.0",
+    "react-native-svg-charts": "^5.4.0",
     "react-native-swipeable": "^0.6.0",
     "react-native-web": "~0.18.11",
     "react-native-webview": "^11.23.1",
     "react-redux": "^8.0.7"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "d3": "^7.8.5"
   },
   "private": true
 }

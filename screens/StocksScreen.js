@@ -16,6 +16,7 @@ import fmp from '../services/fmp';
 import * as WebBrowser from 'expo-web-browser';
 import Charts from '../components/Charts';
 import News from '../components/News';
+import TradingView from "../components/TradingView";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -49,7 +50,7 @@ const StockScreen = ({ route, navigation }) => {
             tabBarStyle: { backgroundColor: '#333' },
             tabBarLabelStyle: { fontSize: 16, fontWeight: 'bold' },
             style: { elevation: 0, borderBottomWidth: 1, borderBottomColor: '#ccc' },
-          },
+          }
         }}
       >
         <Tab.Screen
@@ -61,7 +62,7 @@ const StockScreen = ({ route, navigation }) => {
         <Tab.Screen
           name="Charts"
           options={{ title: `${symbol} Charts` }}
-          component={Charts}
+          component={TradingView}
           initialParams={{ symbol }}
         />
       </Tab.Navigator>
