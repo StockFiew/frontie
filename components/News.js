@@ -1,79 +1,85 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Image, FlatList } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import {View, Text, Image, TouchableOpacity, FlatList, ActivityIndicator, StyleSheet, ScrollView} from 'react-native';
+import fmp from "../services/fmp";
+import * as WebBrowser from "expo-web-browser";
 
-const News = ({ data, handleNewsPress }) => {
-  const renderItem = ({ item }) => (
-    <TouchableOpacity style={styles.newsItem} onPress={() => handleNewsPress(item.url)}>
-      <Image source={{ uri: item.image }} style={styles.newsImage} />
-      <View style={styles.newsTextContainer}>
-        <Text style={styles.newsTitle}>{item.title}</Text>
-        <Text style={styles.newsDescription}>{item.text}</Text>
-        <Text style={styles.newsDate}>{new Date(item.publishedDate).toLocaleString()}</Text>
-      </View>
-    </TouchableOpacity>
-  );
+const News = ({ route, navigation }) => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const keyExtractor = (item, index) => index.toString();
-
-  if (!data) {
-    return (
-      <View style={styles.loadingContainer}>
-        <Text style={styles.loadingText}>Loading...</Text>
-      </View>
-    );
-  }
+  useEffect(() => {
+    fmp.news(route.params.symbol).then((data) => {
+      setData(data)
+    });
+    setIsLoading(false);
+  }, [route.params.symbol]);
 
   return (
-    <FlatList
-      data={data}
-      renderItem={renderItem}
-      keyExtractor={keyExtractor}
-      contentContainerStyle={styles.container}
-    />
+    <View style={styles.container}>
+      {isLoading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#fff" />
+        </View>
+      ) : (
+        <ScrollView>
+          <FlatList
+            data={data}
+            keyExtractor={(item) => item.url}
+            renderItem={({ item }) => (
+              <TouchableOpacity
+                style={styles.newsItem}
+                onPress={() => WebBrowser.openBrowserAsync(item.url)}
+              >
+                <Image source={{ uri: item.image }} style={styles.newsImage}></Image>
+                <Text style={styles.newsTitle}>{item.title}</Text>
+                <Text style={styles.newsSource}>{item.source}</Text>
+                <Text style={styles.newsDate}>{item.publishedDate}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </ScrollView>
+      )}
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#000',
-    padding: 20,
-  },
-  newsItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 20,
-  },
-  newsImage: {
-    width: 100,
-    height: 100,
-    marginRight: 20,
-  },
-  newsTextContainer: {
     flex: 1,
-  },
-  newsTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    marginBottom: 10,
-    color: '#fff',
-  },
-  newsDescription: {
-    fontSize: 14,
-    color: '#ccc',
-    marginBottom: 10,
-  },
-  newsDate: {
-    fontSize: 12,
-    color: '#ccc',
+    backgroundColor: '#fff',
+    padding: 10,
   },
   loadingContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#000',
+    backgroundColor: '#1a1a1a',
+  },
+  newsImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+    marginBottom: 10,
+  },
+  newsItem: {
+    backgroundColor: '#f2f2f2',
+    padding: 10,
+    marginBottom: 10,
+    borderRadius: 5,
+  },
+  newsTitle: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  newsSource: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 5,
+  },
+  newsDate: {
+    fontSize: 12,
+    color: '#999',
   },
 });
 

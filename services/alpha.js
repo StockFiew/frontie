@@ -35,9 +35,31 @@ const adjusted = (symbols) => {
     });
 };
 
+const time_series = (symbol, interval="5min") => {
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${symbol}&interval=${interval}&apikey=${ALPHA_VENTAGE_API_KEY}`;
+
+  return fetch(url, {
+    headers: {
+      'User-Agent': 'request',
+    },
+  })
+    .then((res) => {
+      if (res.status !== 200) {
+        throw new Error('Status: ' + res.status);
+      }
+      return res.json();
+    })
+    .catch((err) => {
+      console.log('Error:', err);
+      return null;
+    });
+}
+
+
 const alpha = {
   api,
   adjusted,
+  time_series
 };
 
 export default alpha;
